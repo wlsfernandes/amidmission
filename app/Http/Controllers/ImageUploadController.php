@@ -86,7 +86,7 @@ class ImageUploadController extends BaseController
     {
         $request->validate([
             'image' => 'required|image|max:5120',
-            'image_type' => 'required|in:banner,blog_social,event_header,card,square,original_fit',
+            'image_type' => 'required|in:banner,blog_social,event_header,card,square,original_fit,logo',
         ]);
 
         try {
