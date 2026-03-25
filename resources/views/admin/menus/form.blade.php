@@ -57,6 +57,20 @@
                             Example: "Acerca de", "Programas", "Contacto".
                         </p>
                     </div>
+                    {{-- Title PT --}}
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">
+                            Title (Portuguese)
+                        </label>
+
+                        <input type="text" name="title_pt" class="form-control"
+                            value="{{ old('title_pt', $menu->title_pt) }}">
+                        <p class="text-muted small mt-1">
+                            This is the main label shown in the website menu (Portuguese version).
+                            Keep it short and clear (1–3 words recommended).
+                            Example: "Sobre", "Programas", "Contato".
+                        </p>
+                    </div>
 
 
                     {{-- Link --}}

@@ -9,6 +9,7 @@ class MenuItem extends Model
     protected $fillable = [
         'title_en',
         'title_es',
+        'title_pt',
         'link',
         'order',
         'parent_id',
