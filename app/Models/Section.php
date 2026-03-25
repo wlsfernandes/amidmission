@@ -15,9 +15,11 @@ class Section extends Model
 
         'title_en',
         'title_es',
+        'title_pt',
 
         'content_en',
         'content_es',
+        'content_pt',
 
         'image_url',
         'link_image',
