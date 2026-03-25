@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Ramsey\Collection\Set;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminUserSeeder::class,
-            RoleSeeder::class
+            RoleSeeder::class,
+            SettingSeeder::class,
+            PageSeeder::class,
         ]);
     }
 }
