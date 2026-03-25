@@ -86,7 +86,7 @@
                         </li>
                     @endif
                 @endforeach
-
+                <li class="nav-item cta"><a href="{{ url('/donate') }}" class="nav-link">@lang('home.donate')</a></li>
                 {{-- Language Switcher --}}
                 <li class="nav-item lang-switcher d-flex align-items-center">
                     <a href="{{ url('/lang/en') }}" class="{{ app()->getLocale() === 'en' ? 'active' : '' }}">
