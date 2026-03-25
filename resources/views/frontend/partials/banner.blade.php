@@ -58,7 +58,7 @@
 
     </div>
 </section>
-@if (request()->is('/'))
+@if (request()->is('/') || request()->is('donate'))
     {{-- Only show on homepage --}}
 
     <section class="ftco-appointment ftco-section ftco-no-pt ftco-no-pb img">
