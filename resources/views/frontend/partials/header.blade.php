@@ -6,17 +6,17 @@
             <div class="col-md-6 d-flex align-items-center">
                 <p class="mb-0 phone pl-md-2">
 
-                    @if ($settings->contact_phone)
+                    @if (!empty($settings->contact_phone))
                         <a href="tel:{{ $settings->contact_phone }}" class="mr-2">
                             <span class="fa fa-phone mr-1"></span>
-                            {{ $settings->contact_phone }}
+                            {{ $settings->contact_phone ?? '' }}
                         </a>
                     @endif
 
-                    @if ($settings->contact_email)
+                    @if (!empty($settings->contact_email))
                         <a href="mailto:{{ $settings->contact_email }}">
                             <span class="fa fa-paper-plane mr-1"></span>
-                            {{ $settings->contact_email }}
+                            {{ $settings->contact_email ?? '' }}
                         </a>
                     @endif
 
@@ -32,7 +32,7 @@
                             class="d-flex align-items-center justify-content-center" title="{{ $link->label() }}">
 
                             <span class="fa {{ $link->icon() }}">
-                                <i class="sr-only">{{ $link->label() }}</i>
+                                <i class="sr-only">{{ $link->label() ?? '' }}</i>
                             </span>
 
                         </a>
