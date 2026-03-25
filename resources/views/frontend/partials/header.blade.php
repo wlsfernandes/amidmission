@@ -51,7 +51,6 @@
 
         {{-- Logo or Site Name --}}
         <a class="navbar-brand" href="{{ url('/') }}">
-
             {{ $settings->site_name ?? 'AMID MISSION' }}
         </a>
 
@@ -62,30 +61,33 @@
         <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
 
-                <li class="nav-item active">
-                    <a href="{{ url('/') }}" class="nav-link">Home</a>
-                </li>
+                @foreach ($menuItems as $item)
+                    @if ($item->children->count())
+                        <li class="nav-item dropdown">
+                            <a href="{{ $item->link ?: '#' }}" class="nav-link dropdown-toggle"
+                                id="navbarDropdown{{ $item->id }}" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                {{ $item->title }}
+                            </a>
 
-                <li class="nav-item">
-                    <a href="{{ url('/about') }}" class="nav-link">@lang('home.about')</a>
-                </li>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown{{ $item->id }}">
+                                @foreach ($item->children as $child)
+                                    <a class="dropdown-item" href="{{ $child->link }}">
+                                        {{ $child->title }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </li>
+                    @else
+                        <li class="nav-item {{ request()->url() == url($item->link) ? 'active' : '' }}">
+                            <a href="{{ $item->link }}" class="nav-link">
+                                {{ $item->title }}
+                            </a>
+                        </li>
+                    @endif
+                @endforeach
 
-                <li class="nav-item">
-                    <a href="{{ url('/missions') }}" class="nav-link">@lang('home.missions')</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="{{ url('/blog') }}" class="nav-link">@lang('home.blog')</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="{{ url('/contact') }}" class="nav-link">@lang('home.contact')</a>
-                </li>
-
-                {{-- CTA --}}
-                <li class="nav-item cta">
-                    <a href="{{ url('/donate') }}" class="nav-link">@lang('home.donate')</a>
-                </li>
+                {{-- Language Switcher --}}
                 <li class="nav-item lang-switcher d-flex align-items-center">
                     <a href="{{ url('/lang/en') }}" class="{{ app()->getLocale() === 'en' ? 'active' : '' }}">
                         <img src="{{ asset('/assets/admin/images/flags/us.jpg') }}" height="16">

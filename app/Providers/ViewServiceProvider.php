@@ -66,10 +66,9 @@ class ViewServiceProvider extends ServiceProvider
             $donations = Donation::inRandomOrder()
                 ->limit(3)
                 ->get();
-            $menu = MenuItem::query()
-                ->main()
+                $menuItems = MenuItem::main()
                 ->with('children')
-                ->orderBy('order')
+                ->ordered()
                 ->get();
 
             $view->with([
@@ -86,7 +85,7 @@ class ViewServiceProvider extends ServiceProvider
                 'projects' => $projects,
                 'collaborators' => $collaborators,
                 'donations' => $donations,
-                'menu' => $menu,
+                'menuItems' => $menuItems,
             ]);
         });
     }
