@@ -1,0 +1,30 @@
+/* ================================= */
+/* CKEditor Title Editor Only */
+/* ================================= */
+
+textarea.ckeditor-title + .ck-editor .ck-editor__editable {
+    min-height: 36px !important;
+    max-height: 100px;
+    padding: 6px 10px;
+    overflow-y: hidden;
+}
+
+/* remove paragraph spacing */
+textarea.ckeditor-title + .ck-editor .ck-editor__editable p {
+    margin: 0;
+}
+
+/* keep it visually like an input field */
+textarea.ckeditor-title + .ck-editor {
+    border-radius: 4px;
+}
+
+/* prevent multi-line growth */
+textarea.ckeditor-title + .ck-editor .ck-editor__editable {
+    white-space: nowrap;
+}
+
+/* hide extra toolbar separators spacing */
+textarea.ckeditor-title + .ck-editor .ck-toolbar {
+    padding: 4px;
+}

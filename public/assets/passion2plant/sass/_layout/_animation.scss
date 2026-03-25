@@ -1,0 +1,97 @@
+
+//animation Here
+@keyframes left-right {
+	0% {
+		margin: 0;
+	}
+	50% {
+		margin-bottom: 100px;
+	}
+	100% {
+		margin: 0;
+	}
+}
+@keyframes up-down {
+	0% {
+		margin: 0;
+	}
+	50% {
+		margin-right: 100px;
+	}
+	100% {
+		margin: 0;
+	}
+}
+//animation Here
+
+
+
+/* Animation of the witr */
+@-webkit-keyframes move_title_bg1 {
+  from {
+      left: 0
+  }
+
+  to {
+      left: 100%
+  }
+}
+
+@keyframes move_title_bg1 {
+  from {
+      left: 0
+  }
+
+  to {
+      left: 100%
+  }
+}
+
+@-webkit-keyframes move_title_bg2 {
+  from {
+      right: 0
+  }
+
+  to {
+      right: 100%
+  }
+}
+
+@keyframes move_title_bg2 {
+  from {
+      right: 0
+  }
+
+  to {
+      right: 100%
+  }
+}
+/* Animation of the witr */
+
+/* Animation of the Video */
+@-webkit-keyframes video-animation {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.5);
+	}
+	100% {
+		opacity: 0;
+		transform: scale(2);
+	}
+}
+
+@keyframes video-animation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2);
+	 } 
+}
+/* Animation of the Video */

@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'learn_more' => 'Saiba mais',
+    'read_more' => 'Leia mais',
+    'about' => 'Sobre',
+    'missions' => 'Missões',
+    'blog' => 'Blog',
+    'contact' => 'Contato',
+    'donate' => 'Doar',
+    'donation_campaign' => 'Campanha de Doação',
+    'are_running' => 'estão em andamento',
+    'donate_now' => 'Doe Agora',
+    'full_name' => 'Nome Completo',
+    'email' => 'Email',
+    'phone' => 'Telefone',
+    'select_causes' => 'Selecione as Causas',
+    'select_amount' => 'Selecione o Valor',
+    'donate' => 'Doar',
+    'donate_now' => 'Doe Agora',
+    'become_volunteer' => 'Torne-se um Voluntário',
+    'payment_method' => 'Método de Pagamento',
+    'credit_card' => 'Cartão de Crédito',
+    'mission_title' => 'Existimos para proclamar o Evangelho a todas as nações',
+    'mission_text' => 'A Amid Mission é dedicada a levar a mensagem de Jesus Cristo além das fronteiras, culturas e línguas. Acreditamos que o Evangelho é o poder de Deus para transformar vidas, restaurar a esperança e revelar Seu amor a cada pessoa. Através da pregação, discipulado e alcance global, estamos comprometidos em equipar os crentes e alcançar as comunidades com verdade, compaixão e propósito. Onde quer que haja uma necessidade, vamos - compartilhando a esperança de Cristo com o mundo.',
+];

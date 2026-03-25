@@ -1,0 +1,87 @@
+/*--Button Area Start--*/
+.cmn--btn {
+	padding: 13px 30px 13px;
+	font-size: 16px;
+	font-weight: 500;
+	background: var(--theme-color);
+	display: inline-block;
+	position: relative;
+	font-weight: 600;
+	z-index: 1;
+	transition: all 0.6s ease-in-out 0s;
+	overflow: hidden;
+	text-transform: capitalize;
+	color: var(--white-color);
+	border-radius: 5px;
+	&:hover{
+		color: var(--white-color);
+		background: var(--theme-color);
+	}
+	&::before {
+		background-color: var(--white-color);
+		content: "";
+		height: 150px;
+		left: -75px;
+		position: absolute;
+		top: -60px;
+		transform: rotate(35deg);
+		transition: all 2600ms cubic-bezier(0.19, 1, 0.22, 1);
+		width: 20px;
+		opacity: 0;
+	}
+	&:hover::before {
+		left: 140%;
+		transition: all 2300ms cubic-bezier(0.19, 1, 0.22, 1);
+		opacity: 0.5;
+	}
+	@include breakpoint(max-sm){
+		font-size: 13px;
+		padding: 10px 20px 10px;
+		i{
+			font-size: 13px;
+		}
+	}
+	
+}
+.cmn--btn2 {
+	padding: 13px 30px 13px;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 150%;
+	border-radius: 5px;
+	display: inline-block;
+	color: var(--white-color);
+	text-transform: capitalize;
+	position: relative;
+	background: transparent;
+	overflow: hidden;
+	border: 1px solid var(--theme-color);
+	span{
+		position: relative;
+		z-index: 1;
+		transition: all 0.5s;
+	}
+	&::before{
+		position: absolute;
+		content: "";
+		top: 50%;
+		transform: translate(-50%, -50%);
+		left:50%;
+		width: 0px;
+		height: 0px;
+		background: var(--theme-color);
+		transition: all 0.5s;
+		border: 1px solid var(--theme-color);
+	}
+	&:hover{
+		span{
+			color: var(--white-color);
+		}
+		&::before{
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+/*--Button Area End--*/
+

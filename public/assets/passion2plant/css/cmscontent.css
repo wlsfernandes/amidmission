@@ -1,0 +1,331 @@
+/* ===================================== */
+/* CMS HTML Rendering Isolation Layer */
+/* ===================================== */
+/* ===================================== */
+/* CMS HTML Rendering Isolation Layer */
+/* ===================================== */
+
+.cms-html {
+    width: 100%;
+}
+
+/* Reset theme typography influence
+   IMPORTANT: do NOT include span/strong/em here
+   or CKEditor inline styles will break */
+
+.cms-html h1,
+.cms-html h2,
+.cms-html h3,
+.cms-html h4,
+.cms-html h5,
+.cms-html h6,
+.cms-html p,
+.cms-html blockquote,
+.cms-html div,
+.cms-html li {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    text-transform: none;
+}
+
+/* Ensure inline styles propagate correctly */
+.cms-html strong,
+.cms-html em,
+.cms-html u,
+.cms-html i {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Prevent theme spacing conflicts */
+
+.cms-html p,
+.cms-html h1,
+.cms-html h2,
+.cms-html h3,
+.cms-html h4,
+.cms-html h5,
+.cms-html h6,
+.cms-html blockquote,
+.cms-html figure {
+    margin: 0;
+    padding: 0;
+}
+
+/* Neutralize heavy theme blockquote styling */
+
+.cms-html blockquote {
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+/* ============================== */
+/* CKEditor Table Support */
+/* ============================== */
+
+.cms-html figure.table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.cms-html table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.cms-html td,
+.cms-html th {
+    border: 1px solid #ccc;
+    padding: 6px;
+    vertical-align: middle;
+}
+
+/* Prevent layout forcing from theme */
+
+.cms-html p,
+.cms-html div,
+.cms-html span,
+.cms-html figure,
+.cms-html table {
+    float: none;
+    clear: none;
+    max-width: none;
+}
+.cms-html p:last-child {
+    margin-bottom: 0;
+}
+/* Keep images responsive */
+
+.cms-html img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ============================== */
+/* Let CKEditor inline styles win */
+/* ============================== */
+
+.cms-html [style] {
+    font-family: inherit;
+}
+
+/* Alignment from CKEditor */
+
+.cms-html p[style*="text-align"],
+.cms-html div[style*="text-align"] {
+    text-align: inherit;
+}
+.cmn--btn {
+    display: inline-block;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border: 2px solid transparent;
+}
+
+/* Primary */
+.cmn--btn.btn-primary {
+    background: #23ad75;
+    color: #fff;
+}
+
+.cmn--btn.btn-primary:hover {
+    background: #23ae75;
+}
+
+/* Secondary */
+.cmn--btn.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+.cmn--btn.btn-secondary:hover {
+    background: #5c636a;
+}
+
+/* Success */
+.cmn--btn.btn-success {
+    background: #198754;
+    color: #fff;
+}
+
+.cmn--btn.btn-success:hover {
+    background: #157347;
+}
+
+/* Danger */
+.cmn--btn.btn-danger {
+    background: #dc3545;
+    color: #fff;
+}
+
+.cmn--btn.btn-danger:hover {
+    background: #bb2d3b;
+}
+
+/* Dark */
+.cmn--btn.btn-dark {
+    background: #212529;
+    color: #fff;
+}
+
+.cmn--btn.btn-dark:hover {
+    background: #1a1e21;
+}
+
+/* ============================
+   CMS HERO SECTION
+============================ */
+.cms-hero {
+    position: relative;
+    max-height: 600px;
+    overflow: hidden;
+}
+
+.cms-hero-bg {
+    object-fit: cover;
+    height: 600px;
+}
+
+/* Hero content container */
+
+.cms-hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+
+    display: flex;
+}
+
+/* Left */
+
+.hero-align-left {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* Center */
+
+.hero-align-center {
+    justify-content: center;
+    text-align: center;
+}
+
+/* Right */
+
+.hero-align-right {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+/* CTA SECTION */
+/* CMS CTA Section */
+
+.cms-cta {
+    position: relative;
+}
+
+/* Content wrapper */
+
+.cta-content {
+    max-width: 600px;
+}
+
+/* Typography */
+
+.cta-content h1,
+.cta-content h2,
+.cta-content h3 {
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.cta-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Button spacing */
+
+.cta-content .cmn--btn {
+    margin-top: 10px;
+}
+/* CTA Button wrapper */
+
+.cta-button-wrapper {
+    display: flex;
+    margin-top: 20px;
+}
+
+/* Left */
+
+.cta-btn-left {
+    justify-content: flex-start;
+}
+
+/* Center */
+
+.cta-btn-center {
+    justify-content: center;
+}
+
+/* Right */
+
+.cta-btn-right {
+    justify-content: flex-end;
+}
+/** Gallery Section */
+.section-carousel {
+    max-width: 400px;
+    margin: auto;
+}
+
+.section-carousel .carousel-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+/* Video Section */
+.section-video {
+    position: relative;
+}
+
+.video-link {
+    display: block;
+    position: relative;
+}
+
+.video-play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    transition: all 0.3s ease;
+}
+
+.video-link:hover .video-play-icon {
+    background: #0d6efd;
+    transform: translate(-50%, -50%) scale(1.1);
+}

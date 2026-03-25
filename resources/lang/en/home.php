@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'learn_more' => 'Learn More',
+    'read_more' => 'Read More',
+    'about' => 'About',
+    'missions' => 'Missions',
+    'blog' => 'Blog',
+    'contact' => 'Contact',
+    'donate' => 'Donate',
+    'donation_campaign' => 'Donation Campaign',
+    'are_running' => 'are running',
+    'donate_now' => 'Donate Now',
+    'full_name' => 'Full Name',
+    'email' => 'Email',
+    'phone' => 'Phone',
+    'select_causes' => 'Select Causes',
+    'select_amount' => 'Select Amount',
+    'donate' => 'Donate',
+    'donate_now' => 'Donate Now',
+    'become_volunteer' => 'Become A Volunteer',
+    'payment_method' => 'Payment Method',
+    'credit_card' => 'Credit Card',
+    'mission_title' => 'We exist to proclaim the Gospel to all nations',
+    'mission_text' => 'Amid Mission is dedicated to carrying the message of Jesus Christ beyond borders, cultures, and languages. We believe the Gospel is the power of God to transform lives, restore hope, and reveal His love to every person. Through preaching, discipleship, and global outreach, we are committed to equipping believers and reaching communities with truth, compassion, and purpose. Wherever there is a need, we go — sharing the hope of Christ with the world.',
+
+];

@@ -1,0 +1,314 @@
+//--Banner Section Start--//
+.banner__section{
+    overflow: hidden;
+    position: relative;
+    .arry__button{
+      position: absolute;
+      top: 50%;
+      right: 50px;
+      transform: translateY(-50%);
+      z-index: 2;
+      @include breakpoint(max-lg){
+        display: none;
+        }
+        .arry__prev{
+            width: 51px;
+            height: 51px;
+            border-radius: 100%;
+            border: 1px solid var(--pra2-color);
+            margin-bottom: 17px;
+            background: transparent;
+            transition: all 0.3s ease-in-out;
+            i{
+                color: var(--pra2-color);
+            }
+           &:hover{
+                background-color: var(--theme-color);
+                border: 1px solid var(--theme-color);
+                i{
+                    color: var(--white-color);
+                }
+           }
+            
+        }
+        .arry__next{
+            width: 51px;
+            height: 51px;
+            border-radius: 100%;
+            background-color: var(--theme-color);
+                border: 1px solid var(--theme-color);
+            i{
+                color: var(--white-color);
+            }
+        }
+    }
+    .swiper-slide-active .banner__image {
+        -webkit-transform: scale(1.12);
+        -moz-transform: scale(1.12);
+        transform: scale(1.12);
+    }
+    .banner-pagination {
+        display: flex;
+        .swiper-pagination-bullet {
+            width: 20px;
+            height: 8x;
+            border-radius: 20px;
+            transition: 0.6s;
+            background-color: var(--white-color);
+            opacity: 1;
+            &:hover {
+                background: var(--white-color);
+            }
+        }
+        .swiper-pagination-bullet.swiper-pagination-bullet-active {
+            width: 30px;
+            background-color: var(--theme-color);
+            transition: 0.6s;
+        }
+    }
+    .banner__pagination__wrapper {
+        position: absolute;
+        z-index: 2;
+        bottom: 10%;
+        left: 50%;
+        transform: translateY(-50%);
+    }
+}
+.banner__image{
+    background: url(../img/banner/banner1.jpg) no-repeat center center;
+	background-size: cover;
+    position: relative;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    z-index: -2;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    transform: scale(1);
+    -webkit-transition: all 8s ease-out 0s;
+    -moz-transition: all 8s ease-out 0s;
+    -ms-transition: all 8s ease-out 0s;
+    -o-transition: all 8s ease-out 0s;
+    transition: all 8s ease-out 0s;
+    &::before{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background: rgba(0, 0, 0, 0.4);
+    }
+}
+.banner__two{
+    background: url(../img/banner/banner6.jpg) no-repeat center center;
+    background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+    position: relative;
+    padding: 250px 0;
+    &::before{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background: rgba(0, 0, 0, 0.4);
+    }
+    .banner__content{
+        padding: initial;
+    }
+}
+.banner__content{
+    position: relative;
+    padding: 250px 0;
+    @include breakpoint(max-xxl){
+        padding: 180px 0;
+    }
+    @include breakpoint(max-xl){
+        padding: 140px 0;
+    }
+    @include breakpoint(max-lg){
+        padding: 110px 0;
+    }
+    @include breakpoint(max-md){
+        padding: 90px 0;
+    }
+    @include breakpoint(max-sm){
+        padding: 60px 0;
+    }
+    h1{
+        text-transform: capitalize;
+        color: var(--white-color);
+        line-height: 92px;
+        margin-bottom: 20px;
+        @include breakpoint(max-xxl){
+            line-height: 80px;
+            font-size: 56px;
+        }
+        @include breakpoint(max-xl){
+            line-height: 65px;
+            font-size: 48px;
+        }
+        @include breakpoint(max-lg){
+            line-height: 50px;
+            margin-bottom: 25px;
+            font-size: 36px;
+        }
+        @include breakpoint(max-sm){
+            line-height: 38px;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+    }
+    p{
+        color: var(--white-color);
+        line-height: 28px;
+    }
+    .banner__button{
+        margin-top: 30px;
+        gap: 20px;
+    }
+    .content__two{
+        justify-content: space-between;
+        @include breakpoint(max-md){
+           flex-wrap: wrap;
+           gap: 20px;
+        }
+        .content{
+            max-width: 820px;
+        }
+        .video__content{
+            .video{
+                position: relative;
+                text-align: center;
+                display: inline-block;
+                z-index: 4;
+              }
+              .video a {
+                position: relative;
+                color: var(--white-color);
+                font-size: 25px;
+                z-index: 1;
+                background-color: var(--theme-color);
+                width: 70px;
+                height: 70px;
+                line-height: 70px;
+                border-radius: 100%;
+                display: block;
+                transition: 0.6s;
+              }
+              .video-pulse::after,
+              .video-pulse::before {
+                position: absolute;
+                content: "";
+                width: 70px;
+                height: 70px;
+                line-height: 70px;
+                border: 1px solid var(--theme-color);
+                opacity: 0.7;
+                left: 0;
+                top: 0;
+                border-radius: 50%;
+                -webkit-animation-duration: 2.5s;
+                animation-duration: 2.5s;
+                -webkit-animation-timing-function: linear;
+                animation-timing-function: linear;
+                -webkit-animation-name: video-animation;
+                animation-name: video-animation;
+                -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+              }
+        
+            .video-pulse::before {
+              -webkit-animation-delay: 1s;
+              animation-delay: 1s;
+            }
+        }
+    }
+}
+.imagetwo{
+    background: url(../img/banner/banner2.jpg) no-repeat center center;
+    background-size: cover;
+}
+//--Banner Section End--//
+
+//--Breadcumd Section Start--//
+.breadcumd__banner {
+    background: url(../img/banner/breadcumd-bg.jpg) no-repeat center center;
+	background-size: cover;
+    position: relative;
+    background-attachment: fixed;
+    &::before{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        content: "";
+        background: rgba(0, 0, 0, 0.5);
+    }
+	.breadcumd__wrapper {
+        @include flex;
+        justify-content: space-between;
+        position: relative;
+        flex-wrap: wrap;
+        padding: 150px 0;
+        @include breakpoint(max-md){
+            gap: 20px;
+        }
+		.left__content {
+			color: var(--white-color);
+            text-transform: capitalize;
+            @include breakpoint(max-sm){
+                font-size: 24px;
+            }
+		}
+		.right__content {
+            @include flex;
+			li {
+				font-size: 16px;
+                font-weight: 600;
+				position: relative;
+                text-transform: capitalize;
+                color: var(--theme-color);
+				&:not(:last-child) {
+					margin-right: 10px;
+                    color: var(--white-color);
+				}
+				a{
+					color: var(--white-color);
+					transition: all 0.3s ease-in-out;
+                    font-weight: 600;
+                    i{
+                        font-size: 16px;
+                        transition: all 0.3s ease-in-out;
+                        margin-right: 4px;
+                    }
+					&:hover{
+						color: var(--theme-color);
+                        i{
+                            color: var(--theme-color);
+                        }
+					}
+				}
+                i{
+                    color: var(--white-color);
+                }
+			}
+		}
+	}
+}
+//--Breadcumd Section End--//

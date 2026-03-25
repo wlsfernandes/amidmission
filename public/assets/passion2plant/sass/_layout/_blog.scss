@@ -1,0 +1,88 @@
+//--Blog Section Start--//
+.blog__section{
+    .blog__items{
+        position: relative;
+        .blog__thumb{
+            position: relative;
+            img{
+                @include imgw;
+            }
+            .content{
+                padding: 30px;
+                background-color: var(--section-color);
+                position: absolute;
+                bottom: 0;
+                z-index: 1;
+                right: 0;
+                left: 0;
+                @include breakpoint(max-sm){
+                    padding: 20px;
+                }
+                h5{
+                    text-transform: capitalize;
+                    line-height: 30px;
+                    margin-bottom: 15px;
+                    @include breakpoint(max-lg){
+                        line-height: 30px;
+                    }
+                }
+            }
+        }
+        .content__up{
+            padding: 30px;
+            background-color: var(--section-color);
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 60px;
+            z-index: 2;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(50px);
+            transition: all 0.4s ease-in-out;
+            @include breakpoint(max-sm){
+                padding: 20px;
+            }
+            h5{
+                text-transform: capitalize;
+                margin-bottom: 30px;
+                line-height: 30px;
+                @include breakpoint(max-sm){
+                    margin-bottom: 10px;
+                }
+                @include breakpoint(max-lg){
+                    line-height: 30px;
+                    margin-bottom: 20px;
+                }
+                a{
+                    transition: all 0.3s ease-in-out;
+                    &:hover{
+                        color: var(--theme-color);
+                    }
+                }
+            }
+            p{
+                margin-bottom: 50px;
+                @include breakpoint(max-xl){
+                    margin-bottom: 40px;
+                }
+                @include breakpoint(max-sm){
+                    margin-bottom: 30px;
+                }
+            }
+            .cmn--brn{
+                i{
+                    margin-left: 5px;
+                }
+            }
+        }
+        &:hover{
+            .content__up {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0px);
+              }
+        }
+    }
+}
+//--Blog Section End--//

@@ -1,0 +1,213 @@
+/* =========================================
+   HERO SECTION (AMID MISSION)
+========================================= */
+
+.hero-wrap {
+    position: relative;
+    width: 100%;
+    height: 70vh; /* Desktop height */
+    min-height: 500px;
+    overflow: hidden;
+}
+
+/* SLIDER ITEM */
+.hero-wrap .slider-item {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    min-height: 500px;
+    height: 600px;
+
+    /* Background image behavior */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+}
+
+/* FIX FOR OWL HEIGHT */
+.hero-wrap .owl-stage,
+.hero-wrap .owl-stage-outer,
+.hero-wrap .owl-item {
+    height: 100%;
+}
+
+/* CONTENT ALIGNMENT */
+.hero-wrap .slider-text {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* TEXT CONTAINER */
+.hero-wrap .text {
+    color: #fff;
+    z-index: 10;
+}
+
+/* SUBTITLE */
+.hero-wrap .text h2 {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* TITLE */
+.hero-wrap .text h1 {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+}
+
+/* CTA BUTTON */
+.hero-wrap .btn {
+    border-radius: 4px;
+}
+
+/* VIDEO BUTTON */
+.hero-wrap .button-link {
+    margin-left: 20px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.hero-wrap .button-video {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    margin-right: 10px;
+}
+
+/* =========================================
+   OVERLAYS (GRADIENT + DARKEN)
+========================================= */
+
+.hero-wrap .overlay-1,
+.hero-wrap .overlay-2,
+.hero-wrap .overlay-3,
+.hero-wrap .overlay-4 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Main dark overlay */
+.hero-wrap .overlay-1 {
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+}
+
+/* Optional gradient overlays */
+.hero-wrap .overlay-2 {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), transparent);
+    z-index: 2;
+}
+
+.hero-wrap .overlay-3 {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+    z-index: 3;
+}
+
+.hero-wrap .overlay-4 {
+    z-index: 4; /* Reserved for future effects */
+}
+
+/* CONTENT ABOVE OVERLAYS */
+.hero-wrap .container,
+.hero-wrap .row,
+.hero-wrap .text {
+    position: relative;
+    z-index: 10;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+/* TABLET */
+@media (max-width: 992px) {
+    .hero-wrap,
+    .hero-wrap .slider-item {
+        height: 60vh;
+        min-height: 450px;
+    }
+
+    .hero-wrap .text h1 {
+        font-size: 36px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .hero-wrap,
+    .hero-wrap .slider-item {
+        height: 50vh;
+        min-height: 380px;
+    }
+
+    .hero-wrap .text h1 {
+        font-size: 28px;
+    }
+
+    .hero-wrap .text h2 {
+        font-size: 14px;
+    }
+
+    .hero-wrap .button-link {
+        display: none; /* optional: hide video on mobile */
+    }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px) {
+    .hero-wrap,
+    .hero-wrap .slider-item {
+        height: 45vh;
+        min-height: 320px;
+    }
+
+    .hero-wrap .text h1 {
+        font-size: 24px;
+    }
+}
+/* Language Switcher */
+.lang-switcher {
+    margin-left: 25px;
+    gap: 10px;
+}
+
+/* Flag links */
+.lang-switcher a {
+    display: inline-block;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+}
+
+/* Hover */
+.lang-switcher a:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Active language */
+.lang-switcher a.active {
+    opacity: 1;
+}
+
+.lang-switcher a.active img {
+    border: 2px solid #fff;
+    border-radius: 3px;
+}
+
+/* Flag image */
+.lang-switcher img {
+    display: block;
+}
