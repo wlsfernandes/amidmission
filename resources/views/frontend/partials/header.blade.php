@@ -52,7 +52,7 @@
         {{-- Logo or Site Name --}}
         <a class="navbar-brand" href="{{ url('/') }}">
             @if ($settings->image_url)
-                <img src="{{ asset('asset/frontend/images/logo.png') }}" alt="{{ $settings->site_name }}"
+                <img src="{{ asset('assets/frontend/images/logo.png') }}" alt="{{ $settings->site_name }}"
                     height="40">
             @else
                 {{ $settings->site_name ?? 'AmidMission' }}
