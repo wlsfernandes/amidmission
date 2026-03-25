@@ -124,6 +124,12 @@ class ImageUploadController extends BaseController
                     'height' => 800,
                     'quality' => 85,
                 ],
+                'logo' => [
+                    'mode' => 'cover',
+                    'width' => 128,
+                    'height' => 80,
+                    'quality' => 95,
+                ],
                 default => [ // original_fit
                     'mode' => 'contain', // no crop (keeps full image)
                     'width' => 1600,
