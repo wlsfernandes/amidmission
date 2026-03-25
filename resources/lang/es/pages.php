@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'contact' => 'Contact',
    'address' => 'Dirección',
 'phone' => 'Teléfono',
 'email' => 'Correo Electrónico',

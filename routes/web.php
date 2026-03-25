@@ -88,7 +88,6 @@ Route::get('/our-blogs', [BlogController::class, 'indexPublic'])->name('blogs.in
 Route::get('/our-book-recommendations', [BookRecommendationController::class, 'indexPublic'])->name('book-recommendations.index.public');
 
 /* Contact */
-Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
 Route::post('/send-message', [ContactController::class, 'send'])->name('contact.send')->middleware('throttle:5,1');
 /* Events */
 Route::get('/event/{event:slug}', [EventController::class, 'display'])->name('events.display');

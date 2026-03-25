@@ -1,7 +1,7 @@
 <?php
 
 return [ 
-
+'contact' => 'Contact',
 'address' => 'Address',
 'phone' => 'Phone',
 'email' => 'Email',
