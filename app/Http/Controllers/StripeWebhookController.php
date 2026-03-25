@@ -64,118 +64,52 @@ class StripeWebhookController extends BaseController
     }
 
     protected function processDonation($session): void
-    {
-        try {
-            SystemLogger::log(
-                'Processing donation payment',
-                'info',
-                'payments.donation.processing',
-                [
-                    'session_id' => $session->id,
-                ]
-            );
+{
+    try {
 
-            $payableId = $session->metadata->payable_id ?? null;
-            $payment   = Payment::create([
-                // ----------------------------------
-                // What this payment is for
-                // ----------------------------------
-                'payable_type'             => Donation::class,
-                'payable_id'               => (int) $payableId,
+        $payment = Payment::create([
+            // Stripe references
+            'stripe_session_id'        => $session->id,
+            'stripe_payment_intent_id' => $session->payment_intent ?? null,
+            'stripe_customer_id'       => $session->customer ?? null,
 
-                // ----------------------------------
-                // Stripe references
-                // ----------------------------------
-                'stripe_session_id'        => $session->id,
-                'stripe_payment_intent_id' => $session->payment_intent ?? null,
-                'stripe_customer_id'       => $session->customer ?? null,
+            // Payment details
+            'payment_type' => 'donation',
+            'status'       => 'completed',
 
-                // ----------------------------------
-                // Payment details
-                // ----------------------------------
-                'payment_type'             => 'one_time',
-                'status'                   => 'completed',
+            // Amount (convert cents → dollars if needed)
+            'amount'   => $session->amount_total / 100,
+            'currency' => strtoupper($session->currency),
 
-                // Stripe sends amount in cents
-                'amount'                   => $session->amount_total,
-                'currency'                 => $session->currency,
+            // Customer
+            'email' => $session->customer_email,
+            'name'  => $session->metadata->name ?? 'Guest',
 
-                // ----------------------------------
-                // Customer snapshot
-                // ----------------------------------
-                'email'                    => $session->customer_email,
-                'first_name'               => $session->metadata->first_name ?? null,
-                'last_name'                => $session->metadata->last_name ?? null,
-                'country'                  => $session->metadata->country ?? null,
-                'address'                  => $session->metadata->address ?? null,
+            // Metadata (optional)
+            'metadata' => $session->metadata,
 
-                // ----------------------------------
-                // Meta / audit
-                // ----------------------------------
-                'metadata'                 => $session->metadata,
-                'paid_at'                  => now(),
-            ]);
+            'paid_at' => now(),
+        ]);
 
-            // send email notification (wrapped in...)
-            try {
-                $payload = [
-                    'email'    => $session->customer_email,
-                    'name'     => trim($session->metadata->first_name ?? '') ?: 'Friend',
-                    'amount'   => number_format($session->amount_total / 100, 2),
-                    'currency' => strtoupper($session->currency ?? 'USD'),
-                ];
+        // Optional: event (email, notifications, etc.)
+       /* event(new PaymentCompleted('donation', [
+            'email'    => $payment->email,
+            'name'     => $payment->name,
+            'amount'   => number_format($payment->amount, 2),
+            'currency' => $payment->currency,
+        ])); */
 
-                event(new PaymentCompleted('donation', $payload));
+    } catch (\Throwable $e) {
 
-            } catch (\Throwable $e) {
-                SystemLogger::log(
-                    'Failed to dispatch PaymentCompleted event',
-                    'error',
-                    'events.payment_completed.failed',
-                    [
-                        'exception'  => $e->getMessage(),
-                        'payment_id' => $payment->id,
-                    ]
-                );
-            }
+        // Keep it simple (you can log if needed)
+        \Log::error('Donation processing failed', [
+            'error' => $e->getMessage(),
+            'session_id' => $session->id ?? null,
+        ]);
 
-            // ✅ SUCCESS LOG
-            SystemLogger::log(
-                'Donation payment recorded successfully',
-                'info',
-                'payments.donation.completed',
-                [
-                    'payment_id'            => $payment->id,
-                    'donation_id'           => $session->metadata->donation_id ?? null,
-                    'stripe_session_id'     => $session->id,
-                    'stripe_payment_intent' => $session->payment_intent ?? null,
-                    'amount'                => $session->amount_total,
-                    'currency'              => $session->currency,
-                    'email'                 => $session->customer_email,
-                ]
-            );
-
-        } catch (\Throwable $e) {
-
-            // ❌ FAILURE LOG (VERY IMPORTANT FOR WEBHOOK DEBUGGING)
-            SystemLogger::log(
-                'Donation payment processing failed',
-                'error',
-                'payments.donation.failed',
-                [
-                    'exception'             => $e->getMessage(),
-                    'stripe_session_id'     => $session->id ?? null,
-                    'stripe_payment_intent' => $session->payment_intent ?? null,
-                    'donation_id'           => $session->metadata->donation_id ?? null,
-                    'email'                 => $session->customer_email ?? null,
-                    'payload'               => $session,
-                ]
-            );
-
-            // ❗ DO NOT throw again
-            // Stripe webhooks must still return 200 to avoid retries
-        }
+        // Do NOT throw (important for Stripe webhook)
     }
+}
 
     /*  * Process a completed checkout session for a cart purchase
      * @param object $session The Stripe checkout session object

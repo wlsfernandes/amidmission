@@ -251,4 +251,11 @@ public function startCheckout(Request $request)
                 ->with('error', 'Failed to delete donation.');
         }
     }
+
+    public function successPage(Request $request)
+    {
+        return view('frontend.donations.success', [
+            'session_id' => $request->session_id,
+        ]);
+    }
 }
