@@ -1,115 +1,96 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'Services')
+@section('title', __('auth.sign_in'))
 
 @section('content')
 
-<section class="signup__section pt-130 pb-130">
-    <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <!-- FORM -->
-            <div class="col-lg-6">
-                <div class="signup__boxes round16">
-    <h3 class="title mb-3">
-        {{ __('auth.welcome_back') }}
-    </h3>
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
 
-    <p class="fz-16 title fw-400 inter mb-4">
-        {{ __('auth.signin_subtitle') }}
-    </p>
+                {{-- LOGIN FORM --}}
+                <div class="col-md-6">
+                    <div class="bg-white p-5 shadow-sm rounded">
 
-    <form method="POST" action="{{ route('login') }}" class="write__review">
-        @csrf
+                        <h3 class="mb-3 text-center">
+                            {{ __('auth.welcome_back') }}
+                        </h3>
 
-        <div class="row g-4">
-            {{-- EMAIL --}}
-            <div class="col-lg-12">
-                <div class="frm__grp">
-                    <label for="email" class="fz-18 fw-500 inter title mb-3">
-                        {{ __('auth.email_label') }}
-                    </label>
+                        <p class="text-center mb-4">
+                            {{ __('auth.signin_subtitle') }}
+                        </p>
 
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ old('email') }}"
-                        placeholder="{{ __('auth.email_placeholder') }}"
-                        class="@error('email') is-invalid @enderror"
-                        required
-                        autofocus
-                    >
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
 
-                    @error('email')
-                        <span class="text-danger fz-14">
-                            {{ $message }}
-                        </span>
-                    @enderror
+                            {{-- EMAIL --}}
+                            <div class="form-group mb-3">
+                                <label>{{ __('auth.email_label') }}</label>
+
+                                <input type="email" name="email" value="{{ old('email') }}"
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    placeholder="{{ __('auth.email_placeholder') }}" required autofocus>
+
+                                @error('email')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            {{-- PASSWORD --}}
+                            <div class="form-group mb-3">
+                                <label>{{ __('auth.password_label') }}</label>
+
+                                <input type="password" name="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    placeholder="{{ __('auth.password_placeholder') }}" required>
+
+                                @error('password')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            {{-- REMEMBER + FORGOT --}}
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                <div>
+                                    <input type="checkbox" name="remember" id="remember">
+                                    <label for="remember" class="mb-0">
+                                        {{ __('auth.remember_me') }}
+                                    </label>
+                                </div>
+
+                                @if (Route::has('password.request'))
+                                    <a href="{{ route('password.request') }}">
+                                        {{ __('auth.forgot_password') }}
+                                    </a>
+                                @endif
+
+                            </div>
+
+                            {{-- SUBMIT --}}
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    {{ __('auth.sign_in') }}
+                                </button>
+                            </div>
+
+                            {{-- REGISTER --}}
+                            <div class="text-center mt-3">
+                                <p>
+                                    {{ __('auth.no_account') }}
+                                    <a href="{{ route('register') }}">
+                                        {{ __('auth.signup') }}
+                                    </a>
+                                </p>
+                            </div>
+
+                        </form>
+
+                    </div>
                 </div>
-            </div>
 
-            {{-- PASSWORD --}}
-            <div class="col-lg-12">
-                <div class="frm__grp">
-                    <label for="password" class="fz-18 fw-500 inter title mb-3">
-                        {{ __('auth.password_label') }}
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="{{ __('auth.password_placeholder') }}"
-                        class="@error('password') is-invalid @enderror"
-                        required
-                    >
-
-                    @error('password')
-                        <span class="text-danger fz-14">
-                            {{ $message }}
-                        </span>
-                    @enderror
-
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}"
-                           class="base fz-14 inter d-flex justify-content-end mt-2">
-                            {{ __('auth.forgot_password') }}
-                        </a>
-                    @endif
-                </div>
-            </div>
-
-            {{-- REGISTER LINK --}}
-            <p class="fz-16 fw-400 title inter">
-                {{ __('auth.no_account') }}
-                <a href="{{ route('register') }}" class="base">
-                    {{ __('auth.signup') }}
-                </a>
-            </p>
-
-            {{-- SUBMIT --}}
-            <div class="col-lg-6">
-                <div class="frm__grp">
-                    <button type="submit" class="cmn--btn">
-                        <span>{{ __('auth.sign_in') }}</span>
-                    </button>
-                </div>
             </div>
         </div>
-    </form>
-</div>
-
-            </div>
-
-            <!-- IMAGE -->
-            <div class="col-lg-6">
-                <div class="signup__thumb">
-                    <img src="{{ asset('/assets/frontend/img/faq/signup-thumb.png') }}" class="w-100" alt="Login">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+    </section>
 
 @endsection

@@ -18,4 +18,5 @@ return [
 
     'sign_in' => 'Iniciar sesión',
 
+    'remember_me' => 'Recuérdame',
 ];

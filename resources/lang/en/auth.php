@@ -16,5 +16,6 @@ return [
     'signup' => 'Sign up',
 
     'sign_in' => 'Sign In',
+'remember_me' => 'Remember Me',
 
 ];
