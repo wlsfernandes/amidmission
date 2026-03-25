@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'learn_more' => 'Saber más',
+'first_name' => 'Nombre',
+    'last_name' => 'Apellido',
+    'email' => 'Correo Electrónico',
+'learn_more' => 'Saber más',
     'read_more' => 'Leer más',
     'about' => 'Sobre Nosotros',
     'missions' => 'Misiones',

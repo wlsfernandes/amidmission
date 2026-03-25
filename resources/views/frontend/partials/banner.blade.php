@@ -64,6 +64,7 @@
     <section class="ftco-appointment ftco-section ftco-no-pt ftco-no-pb img">
         <div class="overlay"></div>
         <div class="container">
+            <x-alert />
             <div class="row">
                 <div class="col-md-5 order-md-last d-flex align-items-stretch">
                     <div class="donation-wrap">
@@ -75,23 +76,36 @@
                                 <span class="number" data-number="24781">0</span>
                             </p>
                         </div>
-                        <form action="#" class="appointment">
+                        <form method="POST" action="{{ route('donations.start') }}" class="appointment">
+                            @csrf
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="name">@lang('home.full_name')</label>
+                                        <label for="first_name">@lang('home.first_name')</label>
                                         <div class="input-wrap">
                                             <div class="icon"><span class="fa fa-user"></span></div>
-                                            <input type="text" class="form-control" placeholder="">
+                                            <input type="text" class="form-control" placeholder="" name="first_name"
+                                                id="first_name">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="name">@lang('home.email')</label>
+                                        <label for="last_name">@lang('home.last_name')</label>
+                                        <div class="input-wrap">
+                                            <div class="icon"><span class="fa fa-user"></span></div>
+                                            <input type="text" class="form-control" placeholder="" name="last_name"
+                                                id="last_name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="email">@lang('home.email')</label>
                                         <div class="input-wrap">
                                             <div class="icon"><span class="fa fa-paper-plane"></span></div>
-                                            <input type="email" class="form-control" placeholder="">
+                                            <input type="email" class="form-control" placeholder="" name="email"
+                                                id="email">
                                         </div>
                                     </div>
                                 </div>
@@ -117,14 +131,16 @@
                                         <label for="name">@lang('home.select_amount')</label>
                                         <div class="input-wrap">
                                             <div class="icon"><span class="fa fa-money"></span></div>
-                                            <input type="text" class="form-control" placeholder="$5">
+                                            <input type="number" name="amount" class="form-control" value="50"
+                                                min="1">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <input type="submit" value="Donate Now" class="btn btn-secondary py-3 px-4">
+                                        <input type="submit" value="@lang('home.donate_now')"
+                                            class="btn btn-secondary py-3 px-4">
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +164,7 @@
                                         <strong class="number" data-number="50">0</strong>
                                     </div>
                                     <div class="text">
-                                        <span>Volunteers</span>
+                                        <span>@lang('home.volunteers')</span>
                                     </div>
                                 </div>
                             </div>

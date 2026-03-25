@@ -123,10 +123,9 @@ Route::get('/our-resources', [ResourceController::class, 'indexPublic'])->name('
 /* Donations */
 Route::get('/donate-now', [DonationController::class, 'indexPublic'])->name('donation.index.public');
 Route::get('/donate/{donation}', [DonationController::class, 'checkout'])->name('donations.checkout');
-Route::post('/donate/{donation}/checkout', [DonationController::class, 'startCheckout'])->name('donations.start');
-Route::get('/donate-success', function () {
-    return view('frontend.donations.success');
-})->name('donations.success');
+Route::post('/donate/checkout', [DonationController::class, 'startCheckout'])->name('donations.start');
+Route::get('/donate/success', [DonationController::class, 'success'])->name('donations.success');
+
 
 /* Store */
 Route::get('/store', [StoreController::class, 'indexPublic'])->name('stores.index.public');

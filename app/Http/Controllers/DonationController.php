@@ -13,71 +13,47 @@ class DonationController extends BaseController
 {
 
 /* redirect to stripewebhookController*/
-    public function startCheckout(Request $request, Donation $donation)
-    {
-        $validated = $request->validate([
-            'amount'     => 'required|numeric|min:1',
-            'email'      => 'required|email',
-            'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
-            'country'    => 'nullable|string|max:255',
-            'address'    => 'nullable|string|max:500',
-        ]);
+public function startCheckout(Request $request)
+{
+    $validated = $request->validate([
+        'amount' => 'required|numeric|min:1',
+        'email'  => 'required|email',
+        'first_name'   => 'required|string|max:255',
+    ]);
 
-        SystemLogger::log(
-            'Starting donation checkout',
-            'info',
-            'donations.checkout.start',
-            [
-                'donation_id' => $donation->id,
-                'email'       => $validated['email'],
-                'amount'      => $validated['amount'],
-            ]
-        );
-        // ✅ Stripe v19 (same API, stricter validation)
-        Stripe::setApiKey(config('services.stripe.secret'));
+    \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        $session = CheckoutSession::create([
-            'mode'                 => 'payment',
+    $session = \Stripe\Checkout\Session::create([
+        'mode' => 'payment',
 
-            // Stripe Checkout handles PCI for you
-            'payment_method_types' => ['card'],
+        'payment_method_types' => ['card'],
 
-            'line_items'           => [[
-                'price_data' => [
-                    'currency'     => 'usd',
-                    'product_data' => [
-                        'name' => $donation->title,
-                    ],
-                    // Stripe expects cents
-                    'unit_amount'  => (int) ($validated['amount'] * 100),
+        'line_items' => [[
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'Donation',
                 ],
-                'quantity'   => 1,
-            ]],
-
-            // Prefill email in Stripe Checkout
-            'customer_email'       => $validated['email'],
-
-            'success_url'          => route('donations.success') . '?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'           => route('donations.checkout', $donation),
-
-            // 🔑 CRITICAL: metadata for webhook routing
-            'metadata'             => [
-                'type'         => 'donation',
-                'payable_type' => Donation::class,
-                'payable_id'   => (string) $donation->id,
-
-                'first_name'   => $validated['first_name'],
-                'last_name'    => $validated['last_name'],
-                'email'        => $validated['email'],
-                'country'      => $validated['country'] ?? '',
-                'address'      => $validated['address'] ?? '',
+                'unit_amount' => (int) ($validated['amount'] * 100),
             ],
-        ]);
+            'quantity' => 1,
+        ]],
 
-        // Stripe v19 returns hosted Checkout URL
-        return redirect()->away($session->url);
-    }
+        'customer_email' => $validated['email'],
+
+        'success_url' => route('donations.success') . '?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url'  => route('donation.index.public'),
+
+        'metadata' => [
+            'type'   => 'donation',
+            'first_name'   => $validated['first_name'],
+            'email'  => $validated['email'],
+            'amount' => $validated['amount'],
+        ],
+    ]);
+
+    return redirect()->away($session->url);
+}
 
 /**
  * Validation rules

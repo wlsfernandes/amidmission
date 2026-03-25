@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'first_name' => 'First Name',
+    'last_name' => 'Last Name',
+    'email' => 'Email',
     'learn_more' => 'Learn More',
     'read_more' => 'Read More',
     'about' => 'About',
