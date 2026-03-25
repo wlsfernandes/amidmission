@@ -28,7 +28,7 @@
                 <div class="row">
 
                     {{-- Title EN --}}
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">
                             Title (English) <span class="text-danger">*</span>
                         </label>
@@ -44,7 +44,7 @@
 
 
                     {{-- Title ES --}}
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">
                             Title (Spanish)
                         </label>
@@ -58,7 +58,7 @@
                         </p>
                     </div>
                     {{-- Title PT --}}
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label">
                             Title (Portuguese)
                         </label>
