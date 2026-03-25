@@ -1,87 +1,158 @@
- <!--Contact Info Section Here-->
- <div class="contact__info__section pt-130 pb-130 section__bg overhid">
-     @if (session('success'))
-         <div class="alert alert-success">
-             {{ session('success') }}
-         </div>
-     @endif
-     <div class="container">
-         <div class="row g-5 align-items-center">
-             <div class="col-lg-7">
-                 <div class="contact__right">
-                     <div class="info__header">
-                         <h6>@lang('pages.have_questions')</h6>
-                         <div class="witr_bar_main">
-                             <div class="witr_bar_inner witr_bar_innerc">
-                             </div>
-                         </div>
-                         <p>
-                             @lang('pages.send_message')
-                         </p>
-                     </div>
-                     <form action="{{ route('contact.send') }}" method="POST">
-                         @csrf
-                         {{-- Honeypot Field (hidden bot trap) --}}
-                         <input type="text" name="website" style="display:none">
-                         <div class="row g-4">
-                             <div class="col-lg-12">
-                                 <div class="form__clt">
-                                     <input type="text" name="name" id="name"
-                                         placeholder="@lang('pages.your_name')">
-                                 </div>
-                             </div>
-                             <div class="col-lg-6">
-                                 <div class="form__clt">
-                                     <input type="text" name="email" id="email"
-                                         placeholder="@lang('pages.your_email')">
-                                 </div>
-                             </div>
-                             <div class="col-lg-6">
-                                 <div class="form__clt">
-                                     <input type="text" name="number" id="number"
-                                         placeholder="@lang('pages.your_phone')">
-                                 </div>
-                             </div>
-                             <div class="col-lg-12">
-                                 <div class="form__clt__big">
-                                     <textarea name="message" id="message" placeholder="@lang('pages.your_message')"></textarea>
-                                 </div>
-                             </div>
-                             <div class="col-lg-4">
-                                 <button type="submit" class="cmn--btn">
-                                     <i class="fa-solid fa-paper-plane"></i> @lang('pages.send')
-                                 </button>
-                             </div>
-                         </div>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="wrapper">
 
-                     </form>
-                 </div>
-             </div>
-             <div class="col-lg-5">
-                 <div class="left__info">
-                     <div class="left__header">
-                         <h3>@lang('pages.contact_information')</h3>
-                         <p>
-                             @lang('pages.contact_information_description')
-                         </p>
-                     </div>
-                     
-                     <div class="info__wrap d-flex align-items-center mt-4">
-                         <div class="icon">
-                             <i class="fa-solid fa-location-dot"></i>
-                         </div>
-                         <div class="content">
-                             <h6>
-                                 @lang('pages.office_address')
-                             </h6>
-                             <p>
-                                  P.O. Box 580527, Kissimmee, FL 34758
-                             </p>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
- <!--Contact Info Section End-->
+                    {{-- CONTACT INFO --}}
+                    <div class="row mb-5">
+
+                        {{-- ADDRESS --}}
+                        <div class="col-md-3">
+                            <div class="dbox w-100 text-center">
+                                <div class="icon bg-primary d-flex align-items-center justify-content-center">
+                                    <span class="fa fa-map-marker"></span>
+                                </div>
+                                <div class="text">
+                                    <p>
+                                        <span>@lang('pages.address'):</span>
+                                        {{ $settings->address ?? '-' }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- PHONE --}}
+                        <div class="col-md-3">
+                            <div class="dbox w-100 text-center">
+                                <div class="icon bg-secondary d-flex align-items-center justify-content-center">
+                                    <span class="fa fa-phone"></span>
+                                </div>
+                                <div class="text">
+                                    <p>
+                                        <span>@lang('pages.phone'):</span>
+                                        <a href="tel:{{ $settings->contact_phone }}">
+                                            {{ $settings->contact_phone ?? '-' }}
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- EMAIL --}}
+                        <div class="col-md-3">
+                            <div class="dbox w-100 text-center">
+                                <div class="icon bg-tertiary d-flex align-items-center justify-content-center">
+                                    <span class="fa fa-paper-plane"></span>
+                                </div>
+                                <div class="text">
+                                    <p>
+                                        <span>@lang('pages.email'):</span>
+                                        <a href="mailto:{{ $settings->contact_email }}">
+                                            {{ $settings->contact_email ?? '-' }}
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- WEBSITE --}}
+                        <div class="col-md-3">
+                            <div class="dbox w-100 text-center">
+                                <div class="icon bg-quarternary d-flex align-items-center justify-content-center">
+                                    <span class="fa fa-globe"></span>
+                                </div>
+                                <div class="text">
+                                    <p>
+                                        <span>@lang('pages.website'):</span>
+                                        <a href="{{ url('/') }}">
+                                            {{ $settings->site_name ?? config('app.name') }}
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {{-- FORM --}}
+                    <div class="row no-gutters">
+                        <div class="col-md-7">
+                            <div class="contact-wrap w-100 p-md-5 p-4">
+
+                                <h3 class="mb-4">@lang('pages.contact_us')</h3>
+
+                                <form method="POST" action="{{ route('contact.send') }}" class="contactForm">
+                                    @csrf
+
+                                    <div class="row">
+
+                                        {{-- NAME --}}
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label">@lang('pages.full_name')</label>
+                                                <input type="text" name="name" class="form-control"
+                                                    placeholder="@lang('pages.your_name')">
+                                            </div>
+                                        </div>
+
+                                        {{-- EMAIL --}}
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label">@lang('pages.email')</label>
+                                                <input type="email" name="email" class="form-control"
+                                                    placeholder="@lang('pages.your_email')">
+                                            </div>
+                                        </div>
+
+                                        {{-- SUBJECT --}}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label">@lang('pages.subject')</label>
+                                                <input type="text" name="subject" class="form-control"
+                                                    placeholder="@lang('pages.subject')">
+                                            </div>
+                                        </div>
+
+                                        {{-- MESSAGE --}}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label">@lang('pages.message')</label>
+                                                <textarea name="message" class="form-control" rows="4" placeholder="@lang('pages.your_message')"></textarea>
+                                            </div>
+                                        </div>
+
+                                        {{-- BUTTON --}}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">
+                                                    @lang('pages.send_message')
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                        {{-- IMAGE --}}
+                        <div class="col-md-5 d-flex align-items-stretch">
+                            <div class="info-wrap w-100 p-5 img"
+                                style="background-image: url('{{ asset('assets/frontend/images/about-3.jpg') }}');">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {{-- MAP --}}
+            <div class="col-md-12">
+                <div id="map" class="map"></div>
+            </div>
+
+        </div>
+    </div>
+</section>

@@ -1,7 +1,7 @@
 <?php
 
-return [
- 
+return [ 
+
 'address' => 'Address',
 'phone' => 'Phone',
 'email' => 'Email',
@@ -17,4 +17,5 @@ return [
 'your_message' => 'Your Message',
 
 'send_message' => 'Send Message',
-    ];
+
+];
