@@ -56,19 +56,23 @@ class Banner extends Model
             });
     }
 
-public function getTitle(){
-    $locale = app()->getLocale();
-    $field = 'title_' . $locale;
-
-    return $this->{$field} ?? $this->title_en ?? '';    
+    public function getTitleAttribute()
+    {
+        $locale = app()->getLocale();
+        $field = 'title_' . $locale;
     
-}
-
-public function getSubtitle(){
-    $locale = app()->getLocale();
-    $field = 'subtitle_' . $locale;
-
-    return $this->{$field} ?? $this->subtitle_en ?? '';    
+        return !empty($this->{$field})
+            ? $this->{$field}
+            : ($this->title_en ?? '');
+    }
     
-}
+    public function getSubtitleAttribute()
+    {
+        $locale = app()->getLocale();
+        $field = 'subtitle_' . $locale;
+    
+        return !empty($this->{$field})
+            ? $this->{$field}
+            : ($this->subtitle_en ?? '');
+    }
 }
