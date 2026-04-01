@@ -23,22 +23,27 @@ class PageController extends BaseController
         return $request->validate([
             'title_en' => ['required', 'string', 'max:255'],
             'title_es' => ['nullable', 'string', 'max:255'],
+            'title_pt' => ['nullable', 'string', 'max:255'],
 
             'image_url' => ['nullable', 'string'],
 
             'content_en' => ['nullable', 'string'],
             'content_es' => ['nullable', 'string'],
+            'content_pt' => ['nullable', 'string'],
 
             'is_published' => ['nullable', 'boolean'],
             // ✅ SEO Core
             'seo_title_en' => ['nullable', 'string', 'max:255'],
             'seo_title_es' => ['nullable', 'string', 'max:255'],
+            'seo_title_pt' => ['nullable', 'string', 'max:255'],
             'seo_description_en' => ['nullable', 'string'],
             'seo_description_es' => ['nullable', 'string'],
+            'seo_description_pt' => ['nullable', 'string'],
             'seo_keywords' => ['nullable', 'string'], // Could be JSON or comma-separated
             // ✅ Social / Open Graph
             'og_title_en' => ['nullable', 'string', 'max:255'],
             'og_title_es' => ['nullable', 'string', 'max:255'],
+            'og_title_pt' => ['nullable', 'string', 'max:255'],
             'og_description_en' => ['nullable', 'string'],
             'og_description_es' => ['nullable', 'string'],
             'og_image_url' => ['nullable', 'string'],
