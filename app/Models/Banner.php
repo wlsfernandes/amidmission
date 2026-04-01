@@ -55,4 +55,20 @@ class Banner extends Model
                     ->orWhere('publish_end_at', '>=', $now);
             });
     }
+
+public function getTitle(){
+    $locale = app()->getLocale();
+    $field = 'title_' . $locale;
+
+    return $this->{$field} ?? $this->title_en ?? '';    
+    
+}
+
+public function getSubtitle(){
+    $locale = app()->getLocale();
+    $field = 'subtitle_' . $locale;
+
+    return $this->{$field} ?? $this->subtitle_en ?? '';    
+    
+}
 }

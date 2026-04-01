@@ -18,20 +18,12 @@
                             <div class="text w-100">
 
                                 {{-- Subtitle --}}
-                                @php
-                                    $subtitle =
-                                        app()->getLocale() === 'es' ? $banner->subtitle_es : $banner->subtitle_en;
-
-                                    $title = app()->getLocale() === 'es' ? $banner->title_es : $banner->title_en;
-                                @endphp
-
-                                @if ($subtitle)
-                                    {!! $subtitle !!}
+                                @if ($banner->subtitle)
+                                    {!! $banner->subtitle !!}
                                 @endif
 
-                                {{-- Title --}}
-                                @if ($title)
-                                    {!! $title !!}
+                                @if ($banner->title)
+                                    {!! $banner->title !!}
                                 @endif
 
                                 {{-- CTA --}}
