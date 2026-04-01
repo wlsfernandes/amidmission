@@ -28,3 +28,8 @@ textarea.ckeditor-title + .ck-editor .ck-editor__editable {
 textarea.ckeditor-title + .ck-editor .ck-toolbar {
     padding: 4px;
 }
+.ck.ck-content,
+.ck.ck-editor__editable.ck-content {
+    background-color: #e9ecef !important;
+    color: #000 !important;
+}
