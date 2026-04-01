@@ -24,6 +24,6 @@ return [
     'become_volunteer' => 'Torne-se um Voluntário',
     'payment_method' => 'Método de Pagamento',
     'credit_card' => 'Cartão de Crédito',
-    'mission_title' => 'Existimos para proclamar o Evangelho a todas as nações',
-    'mission_text' => 'A Amid Mission é dedicada a levar a mensagem de Jesus Cristo além das fronteiras, culturas e línguas. Acreditamos que o Evangelho é o poder de Deus para transformar vidas, restaurar a esperança e revelar Seu amor a cada pessoa. Através da pregação, discipulado e alcance global, estamos comprometidos em equipar os crentes e alcançar as comunidades com verdade, compaixão e propósito. Onde quer que haja uma necessidade, vamos - compartilhando a esperança de Cristo com o mundo.',
+    'mission_title' => 'Enviados para Alcance. Chamados para Multiplicar.',
+    'mission_text' => 'Nossa missão é participar da obra redentora de Deus levando o Evangelho àqueles que ainda não o ouviram. Estamos comprometidos em levantar e enviar trabalhadores, formar discípulos multiplicadores e estabelecer comunidades centradas em Cristo entre as nações. Através de treinamento, mobilização e parceria, equipamos indivíduos, famílias e igrejas para cumprir seu chamado — seja indo, apoiando ou intercedendo. Como co-trabalhadores no Reino de Deus, trabalhamos juntos para que todos os povos tenham a oportunidade de ouvir, crer e seguir a Jesus.',
 ];

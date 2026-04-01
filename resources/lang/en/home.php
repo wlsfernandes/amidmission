@@ -24,7 +24,7 @@ return [
     'become_volunteer' => 'Become A Volunteer',
     'payment_method' => 'Payment Method',
     'credit_card' => 'Credit Card',
-    'mission_title' => 'We exist to proclaim the Gospel to all nations',
-    'mission_text' => 'Amid Mission is dedicated to carrying the message of Jesus Christ beyond borders, cultures, and languages. We believe the Gospel is the power of God to transform lives, restore hope, and reveal His love to every person. Through preaching, discipleship, and global outreach, we are committed to equipping believers and reaching communities with truth, compassion, and purpose. Wherever there is a need, we go — sharing the hope of Christ with the world.',
+    'mission_title' => 'Sent to Reach. Called to Multiply.',
+    'mission_text' => 'Our mission is to participate in God’s redemptive work by taking the Gospel to those who have not yet heard. We are committed to raising and sending workers, forming multiplying disciples, and establishing Christ-centered communities among the nations. Through training, mobilization, and partnership, we equip individuals, families, and churches to fulfill their calling—whether going, supporting, or interceding. As co-workers in God’s Kingdom, we labor together so that every people may have the opportunity to hear, believe, and follow Jesus.',
 
 ];

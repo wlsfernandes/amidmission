@@ -25,6 +25,6 @@ return [
     'payment_method' => 'Método de Pago',
     'credit_card' => 'Tarjeta de Crédito',
 
-    'mission_title' => 'Existimos para proclamar el Evangelio a todas las naciones',
-    'mission_text' => 'Amid Mission se dedica a llevar el mensaje de Jesus Cristo más allá de las fronteras, culturas y lenguas. Creemos que el Evangelio es el poder de Dios para transformar vidas, restaurar la esperanza y revelar Su amor a cada persona. A través de la predicación, el discipulado y el alcance global, estamos comprometidos a equipar a los creyentes y alcanzar a las comunidades con verdad, compasión y propósito. Dondequiera que haya una necesidad, vamos — compartiendo la esperanza de Cristo con el mundo.',
+    'mission_title' => 'Enviados para Alcanzar. Llamados a Multiplicar.',
+    'mission_text' => 'Nuestra misión es participar en la obra redentora de Dios llevando el Evangelio a aquellos que aún no lo han escuchado. Estamos comprometidos a levantar y enviar trabajadores, formar discípulos multiplicadores y establecer comunidades centradas en Cristo entre las naciones. A través de la capacitación, la movilización y la asociación, equipamos a individuos, familias y iglesias para cumplir su llamado, ya sea yendo, apoyando o intercediendo. Como colaboradores en el Reino de Dios, trabajamos juntos para que todos los pueblos tengan la oportunidad de escuchar, creer y seguir a Jesús.',
 ];
