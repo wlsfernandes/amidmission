@@ -23,9 +23,11 @@ class BannerController extends BaseController
 
             'title_en' => 'required|string|max:255',
             'title_es' => 'nullable|string|max:255',
+            'title_pt' => 'nullable|string|max:255',
 
             'subtitle_en' => 'nullable|string',
             'subtitle_es' => 'nullable|string',
+            'subtitle_pt' => 'nullable|string',
 
             'link' => 'nullable|url|max:255',
             'open_in_new_tab' => 'nullable|boolean',
