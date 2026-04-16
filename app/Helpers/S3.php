@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Helpers;
 
+use App\Models\Media;
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -10,6 +13,43 @@ use Intervention\Image\ImageManager;
 
 class S3
 {
+    protected static function baseFolder(): string
+    {
+        return trim((string) env('APP_FOLDER', config('app.name', 'application')), '/');
+    }
+
+    protected static function buildPath(string $directory): string
+    {
+        $base = self::baseFolder();
+
+        return trim($base.'/'.trim($directory, '/'), '/');
+    }
+
+    protected static function storeMedia(
+        string $path,
+        string $directory,
+        UploadedFile $file,
+        string $disk = 's3'
+    ): void {
+        try {
+            Media::firstOrCreate(
+                ['path' => $path],
+                [
+                    'disk' => $disk,
+                    'folder' => $directory,
+                    'filename' => basename($path),
+                    'original_name' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getMimeType(),
+                    'extension' => $file->getClientOriginalExtension(),
+                    'size' => $file->getSize(),
+                    'uploaded_by' => Auth::id(),
+                ]
+            );
+        } catch (\Throwable $e) {
+            // 🔕 silent fail — NEVER break upload because of media table
+        }
+    }
+
     /**
      * Upload ANY file (PDF, DOCX, ZIP, etc.)
      * Returns the stored path (NOT URL)
@@ -23,14 +63,19 @@ class S3
             throw new Exception('Invalid file upload.');
         }
 
-        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $path     = trim($directory, '/') . '/' . $filename;
+        $directory = self::buildPath($directory);
+
+        $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
+        $path = $directory.'/'.$filename;
 
         Storage::disk($disk)->putFileAs(
             $directory,
             $file,
             $filename
         );
+
+        // ✅ Save media
+        self::storeMedia($path, $directory, $file, $disk);
 
         return $path;
     }
@@ -59,22 +104,23 @@ class S3
             throw new Exception('Uploaded file is not a valid image.');
         }
 
-        $filename = Str::uuid() . '.webp';
-        $path     = trim($directory, '/') . '/' . $filename;
+        // ✅ APPLY APP FOLDER AUTOMATICALLY
+        $baseFolder = trim((string) env('APP_FOLDER', config('app.name', 'application')), '/');
+        $directory = trim($baseFolder.'/'.trim($directory, '/'), '/');
 
-        $manager = new ImageManager(new Driver());
+        $filename = Str::uuid().'.webp';
+        $path = $directory.'/'.$filename;
+
+        $manager = new ImageManager(new Driver);
 
         try {
             $img = $manager
                 ->read($realPath)
                 ->orient();
 
-            // cover = exact size + crop overflow (best for banners/cards/square)
             if ($mode === 'cover') {
                 $img = $img->cover($width, $height);
             } else {
-                // contain = no crop (keeps whole image), scale down only
-                // Note: scaleDown(width, height) is the right v3 approach
                 $img = $img->scaleDown($width, $height);
             }
 
@@ -89,12 +135,32 @@ class S3
             (string) $webp,
             [
                 'ContentType' => 'image/webp',
-                'Visibility'  => 'public',
+                'Visibility' => 'public',
             ]
         );
 
+        // ✅ SAVE TO MEDIA TABLE (SAFE - WILL NOT BREAK UPLOAD)
+        try {
+            \App\Models\Media::firstOrCreate(
+                ['path' => $path],
+                [
+                    'disk' => $disk,
+                    'folder' => $directory,
+                    'filename' => basename($path),
+                    'original_name' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getMimeType(),
+                    'extension' => $file->getClientOriginalExtension(),
+                    'size' => $file->getSize(),
+                    'uploaded_by' => Auth::id(),
+                ]
+            );
+        } catch (\Throwable $e) {
+            // 🔕 Do nothing — never break upload because of media logging
+        }
+
         return $path;
     }
+
     /**
      * Upload IMAGE and convert to WebP
      * Returns the stored path (NOT URL)
@@ -116,19 +182,22 @@ class S3
             throw new Exception('Uploaded file is not readable.');
         }
 
-        // Safer image validation (does not depend on filename)
         if (! @exif_imagetype($realPath)) {
             throw new Exception('Uploaded file is not a valid image.');
         }
 
-        $filename = Str::uuid() . '.webp';
-        $path     = trim($directory, '/') . '/' . $filename;
+        // ✅ APPLY APP FOLDER
+        $baseFolder = trim((string) env('APP_FOLDER', config('app.name', 'application')), '/');
+        $directory = trim($baseFolder.'/'.trim($directory, '/'), '/');
 
-        $manager = new ImageManager(new Driver());
+        $filename = Str::uuid().'.webp';
+        $path = $directory.'/'.$filename;
+
+        $manager = new ImageManager(new Driver);
 
         try {
             $image = $manager
-                ->read($realPath) // 🔥 use realPath instead of file object
+                ->read($realPath)
                 ->orient()
                 ->resize(
                     1920,
@@ -149,9 +218,28 @@ class S3
             (string) $image,
             [
                 'ContentType' => 'image/webp',
-                'Visibility'  => 'public',
+                'Visibility' => 'public',
             ]
         );
+
+        // ✅ SAVE TO MEDIA (SAFE)
+        try {
+            Media::firstOrCreate(
+                ['path' => $path],
+                [
+                    'disk' => $disk,
+                    'folder' => $directory,
+                    'filename' => basename($path),
+                    'original_name' => $file->getClientOriginalName(),
+                    'mime_type' => $file->getMimeType(),
+                    'extension' => $file->getClientOriginalExtension(),
+                    'size' => $file->getSize(),
+                    'uploaded_by' => Auth::id(),
+                ]
+            );
+        } catch (\Throwable $e) {
+            // never break upload
+        }
 
         return $path;
     }
@@ -167,8 +255,17 @@ class S3
             return;
         }
 
-        if (Storage::disk($disk)->exists($path)) {
-            Storage::disk($disk)->delete($path);
+        try {
+            // 🔹 Delete from storage if exists
+            if (Storage::disk($disk)->exists($path)) {
+                Storage::disk($disk)->delete($path);
+            }
+
+            // 🔹 Remove from media table
+            Media::where('path', $path)->delete();
+
+        } catch (\Throwable $e) {
+            // 🔕 Do not throw — avoid breaking system
         }
     }
 }
