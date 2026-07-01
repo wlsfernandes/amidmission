@@ -17,15 +17,19 @@
         @else
             <div class="row align-items-center g-5">
                 @if ($layout === 'image_left')
-                    @include('frontend.pages.sections.partials.image')
+                    @include('frontend.pages.sections.partials.image', [
+                        'imageColClass' => 'col-lg-5 order-2 order-lg-1',
+                    ])
                 @endif
-                <div class="col-lg-7">
+                <div class="col-lg-7 order-1 {{ $layout === 'image_left' ? 'order-lg-2' : 'order-lg-1' }}">
                     <div class="cms-html mb-3">
                         @include('frontend.pages.sections.partials.content')
                     </div>
                 </div>
                 @if ($layout === 'image_right')
-                    @include('frontend.pages.sections.partials.image')
+                    @include('frontend.pages.sections.partials.image', [
+                        'imageColClass' => 'col-lg-5 order-2 order-lg-2',
+                    ])
                 @endif
             </div>
         @endif

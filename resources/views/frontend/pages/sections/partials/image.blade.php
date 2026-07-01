@@ -1,4 +1,4 @@
-<div class="col-lg-5">
+<div class="{{ $imageColClass ?? 'col-lg-5' }}">
 
     @if ($section->image_url)
         <div class="section-image text-center">

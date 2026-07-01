@@ -8,7 +8,7 @@
 
             {{-- IMAGE LEFT --}}
             @if ($imageLeft)
-                <div class="col-xxl-5 col-xl-5 col-lg-8">
+                <div class="col-xxl-5 col-xl-5 col-lg-8 order-2 order-lg-1">
                     @if ($section->image_url)
                         <div class="details__thumb text-center">
                             <img src="{{ route('admin.images.preview', [
@@ -22,7 +22,7 @@
             @endif
 
             {{-- TEXT --}}
-            <div class="col-xxl-7 col-xl-7 col-lg-10">
+            <div class="col-xxl-7 col-xl-7 col-lg-10 order-1 {{ $imageLeft ? 'order-lg-2' : 'order-lg-1' }}">
 
                 <div class="about__header heading-gradient-green-black">
                     <h2 class="heading-gradient-green-black wow fadeInUp">
@@ -40,7 +40,7 @@
 
             {{-- IMAGE RIGHT --}}
             @if (!$imageLeft)
-                <div class="col-xxl-5 col-xl-5 col-lg-8">
+                <div class="col-xxl-5 col-xl-5 col-lg-8 order-2 order-lg-2">
                     @if ($section->image_url)
                         <div class="details__thumb text-center">
                             <img src="{{ route('admin.images.preview', [
