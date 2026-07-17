@@ -70,16 +70,7 @@ class ImageUploadController extends BaseController
     ];
 
     /**
-     * Preview an image, resolving across disk and path-prefix variations.
-     *
-     * Search order:
-     *  1. Stored path on the configured default disk (new uploads).
-     *  2. Stored path on S3 — files uploaded before disk config was changed.
-     *  3. APP_FOLDER-prefixed path on S3 — legacy records whose stored path
-     *     omits the folder prefix that the S3 helper adds on upload.
-     *
-     * Returns a streamed response for local files, or a 10-minute temporary
-     * URL redirect for S3. HTTP 404 when nothing is found.
+     * Stream an image stored on the local disk.
      */
     public function preview(string $model, int $id)
     {
@@ -87,61 +78,17 @@ class ImageUploadController extends BaseController
 
         abort_if(! $instance->image_url, 404);
 
-        $storedPath = $instance->image_url;
-        $defaultDisk = config('filesystems.default', 'local');
-        $appFolder = trim(config('app.name', 'amidmission'), '/');
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk('local');
 
-        // Candidate list: [path, disk] in priority order.
-        $candidates = [
-            [$storedPath,                                          $defaultDisk], // 1. new uploads on configured disk
-            [$storedPath,                                          's3'],          // 2. same path on S3
-            [$appFolder.'/'.ltrim($storedPath, '/'),          's3'],          // 3. legacy prefix on S3
-        ];
+        abort_unless($disk->exists($instance->image_url), 404);
 
-        // De-duplicate (e.g. when defaultDisk is already 's3').
-        $seen = [];
-        $candidates = array_filter($candidates, function ($c) use (&$seen) {
-            $key = $c[1].':'.$c[0];
-            if (isset($seen[$key])) {
-                return false;
-            }
-            $seen[$key] = true;
+        $mime = $disk->mimeType($instance->image_url) ?: 'image/webp';
 
-            return true;
-        });
-
-        foreach ($candidates as [$path, $disk]) {
-            try {
-                if (! Storage::disk($disk)->exists($path)) {
-                    continue;
-                }
-            } catch (Throwable) {
-                continue; // disk unreachable or not configured — try next
-            }
-
-            if ($disk === 's3') {
-                /** @var FilesystemAdapter $s3Disk */
-                $s3Disk = Storage::disk($disk);
-
-                return redirect($s3Disk->temporaryUrl($path, now()->addMinutes(10)));
-            }
-
-            // Local / public disk — stream securely.
-            /** @var FilesystemAdapter $localDisk */
-            $localDisk = Storage::disk($disk);
-            $mime = $localDisk->mimeType($path) ?: 'image/webp';
-
-            return response(
-                $localDisk->get($path),
-                200,
-                [
-                    'Content-Type' => $mime,
-                    'Cache-Control' => 'private, max-age=600',
-                ]
-            );
-        }
-
-        abort(404);
+        return response($disk->get($instance->image_url), 200, [
+            'Content-Type'  => $mime,
+            'Cache-Control' => 'private, max-age=600',
+        ]);
     }
 
     public function edit(string $model, int $id)
@@ -165,7 +112,7 @@ class ImageUploadController extends BaseController
         try {
             $instance = $this->resolveModel($model, $id);
 
-            $disk = config('filesystems.default', 'local');
+            $disk = 'local';
 
             // Presets (simple + predictable)
             $preset = match ($request->input('image_type')) {
@@ -284,7 +231,7 @@ class ImageUploadController extends BaseController
             $instance = $this->resolveModel($model, $id);
 
             if (! empty($instance->image_url)) {
-                S3::delete($instance->image_url, config('filesystems.default', 'local'));
+                S3::delete($instance->image_url, 'local');
 
                 $instance->update([
                     'image_url' => null,
