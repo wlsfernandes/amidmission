@@ -86,25 +86,26 @@ class ImageUploadController extends BaseController
 
         abort_if(! $instance->image_url, 404);
 
-        $storedPath  = $instance->image_url;
+        $storedPath = $instance->image_url;
         $defaultDisk = config('filesystems.default', 'local');
-        $appFolder   = trim(config('app.name', 'amidmission'), '/');
+        $appFolder = trim(config('app.name', 'amidmission'), '/');
 
         // Candidate list: [path, disk] in priority order.
         $candidates = [
             [$storedPath,                                          $defaultDisk], // 1. new uploads on configured disk
             [$storedPath,                                          's3'],          // 2. same path on S3
-            [$appFolder . '/' . ltrim($storedPath, '/'),          's3'],          // 3. legacy prefix on S3
+            [$appFolder.'/'.ltrim($storedPath, '/'),          's3'],          // 3. legacy prefix on S3
         ];
 
         // De-duplicate (e.g. when defaultDisk is already 's3').
-        $seen       = [];
+        $seen = [];
         $candidates = array_filter($candidates, function ($c) use (&$seen) {
-            $key = $c[1] . ':' . $c[0];
+            $key = $c[1].':'.$c[0];
             if (isset($seen[$key])) {
                 return false;
             }
             $seen[$key] = true;
+
             return true;
         });
 
@@ -113,24 +114,27 @@ class ImageUploadController extends BaseController
                 if (! Storage::disk($disk)->exists($path)) {
                     continue;
                 }
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 continue; // disk unreachable or not configured — try next
             }
 
             if ($disk === 's3') {
-                return redirect(
-                    Storage::disk($disk)->temporaryUrl($path, now()->addMinutes(10))
-                );
+                /** @var \Illuminate\Filesystem\FilesystemAdapter $s3Disk */
+                $s3Disk = Storage::disk($disk);
+
+                return redirect($s3Disk->temporaryUrl($path, now()->addMinutes(10)));
             }
 
             // Local / public disk — stream securely.
-            $mime = Storage::disk($disk)->mimeType($path) ?: 'image/webp';
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $localDisk */
+            $localDisk = Storage::disk($disk);
+            $mime = $localDisk->mimeType($path) ?: 'image/webp';
 
             return response(
-                Storage::disk($disk)->get($path),
+                $localDisk->get($path),
                 200,
                 [
-                    'Content-Type'  => $mime,
+                    'Content-Type' => $mime,
                     'Cache-Control' => 'private, max-age=600',
                 ]
             );
