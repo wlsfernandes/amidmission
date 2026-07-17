@@ -71,7 +71,7 @@
                             {{-- Image --}}
                             <td>
                                 <div class="d-flex flex-column align-items-center justify-content-center">
-                                    @if ($banner->image)
+                                    @if ($banner->image_url)
                                         <a href="{{ route('admin.images.preview', [
                                             'model' => 'banners',
                                             'id' => $banner->id,
