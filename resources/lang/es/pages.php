@@ -17,4 +17,6 @@ return [
 'your_message' => 'Su Mensaje',
 
 'send_message' => 'Enviar Mensaje',
+'donate_now' => 'Donar Ahora',
+'donations' => 'Donaciones',
 ];

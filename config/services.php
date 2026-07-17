@@ -18,6 +18,11 @@ return [
         'secret'         => env('STRIPE_SECRET'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
+
+    'paypal' => [
+        'client_id' => env('PAYPAL_CLIENT_ID'),
+        'currency'  => env('PAYPAL_CURRENCY', 'USD'),
+    ],
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

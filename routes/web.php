@@ -24,6 +24,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PagePublicController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaypalDonationController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -121,10 +122,17 @@ Route::get('/insights/{type:slug}', [MediaController::class, 'byType'])->name('m
 Route::get('/our-resources', [ResourceController::class, 'indexPublic'])->name('resources.index.public');
 
 /* Donations */
-Route::get('/donate-now', [DonationController::class, 'indexPublic'])->name('donation.index.public');
-Route::post('/donate/checkout', [DonationController::class, 'startCheckout'])->name('donations.start');
-Route::get('/donate/success', [DonationController::class, 'successPage'])->name('donations.success');
+Route::get('/donate', [DonationController::class, 'indexPublic'])->name('donation.index.public');
+Route::post('/donate/checkout', [PaypalDonationController::class, 'startCheckout'])->name('donations.paypal.checkout');
+Route::post('/donate/complete', [PaypalDonationController::class, 'complete'])->name('donations.paypal.complete');
+Route::get('/donate/paypal/success', [PaypalDonationController::class, 'success'])->name('donations.paypal.success');
+Route::get('/donate-success', function () {
+    return view('frontend.donations.success');
+})->name('donations.success');
 
+/* PayPal Webhooks */
+Route::post('/paypal/webhook', [PayPalWebhookController::class, 'handle'])->name('paypal.webhook');
+Route::get('/paypal/welcome', [PayPalWebhookController::class, 'welcome'])->name('membership.welcome');
 
 /* Store */
 Route::get('/store', [StoreController::class, 'indexPublic'])->name('stores.index.public');
