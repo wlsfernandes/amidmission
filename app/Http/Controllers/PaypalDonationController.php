@@ -15,10 +15,10 @@ class PaypalDonationController extends Controller
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
-            'email'      => 'required|email|max:255',
-            'amount'     => 'required|numeric|min:1',
-            'message'    => 'nullable|string|max:1000',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'amount' => 'required|numeric|min:1',
+            'message' => 'nullable|string|max:1000',
         ]);
 
         session(['paypal_donation' => $validated]);
@@ -46,18 +46,18 @@ class PaypalDonationController extends Controller
 
         Payment::create([
             'payable_type' => null,
-            'payable_id'   => null,
+            'payable_id' => null,
             'payment_type' => 'one_time',
-            'status'       => 'completed',
-            'amount'       => (int) round($data['amount'] * 100),
-            'currency'     => $currency,
-            'email'        => $data['email'],
-            'first_name'   => $data['first_name'],
-            'last_name'    => $data['last_name'],
-            'metadata'     => [
+            'status' => 'completed',
+            'amount' => (int) round($data['amount'] * 100),
+            'currency' => $currency,
+            'email' => $data['email'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'metadata' => [
                 'paypal_order_id' => $request->paypal_order_id,
-                'message'         => $data['message'] ?? null,
-                'source'          => 'donation_form',
+                'message' => $data['message'] ?? null,
+                'source' => 'donation_form',
             ],
             'paid_at' => now(),
         ]);

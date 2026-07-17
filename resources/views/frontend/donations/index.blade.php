@@ -207,19 +207,21 @@
 
 @push('scripts')
     {{-- PayPal JS SDK --}}
-    <script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency={{ config('services.paypal.currency', 'USD') }}&intent=capture"></script>
+    <script
+        src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency={{ config('services.paypal.currency', 'USD') }}&intent=capture">
+    </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             /* ── Amount preset buttons ──────────────────────────────── */
-            const amountInput   = document.getElementById('amount');
+            const amountInput = document.getElementById('amount');
             const amountButtons = document.querySelectorAll('.donation-amount-button');
 
-            amountButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
+            amountButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
                     amountInput.value = this.dataset.amount;
-                    amountButtons.forEach(function (item) {
+                    amountButtons.forEach(function(item) {
                         item.classList.remove('btn-success');
                         item.classList.add('btn-outline-success');
                     });
@@ -229,8 +231,8 @@
                 });
             });
 
-            amountInput.addEventListener('input', function () {
-                amountButtons.forEach(function (button) {
+            amountInput.addEventListener('input', function() {
+                amountButtons.forEach(function(button) {
                     var isSelected = Number(button.dataset.amount) === Number(amountInput.value);
                     button.classList.toggle('btn-success', isSelected);
                     button.classList.toggle('btn-outline-success', !isSelected);
@@ -238,19 +240,19 @@
             });
 
             /* ── PayPal buttons ─────────────────────────────────────── */
-            var donationForm   = document.getElementById('donation-form');
+            var donationForm = document.getElementById('donation-form');
             var donationAmount = 0;
 
             paypal.Buttons({
                 style: {
-                    layout : 'vertical',
-                    color  : 'gold',
-                    shape  : 'rect',
-                    label  : 'donate',
+                    layout: 'vertical',
+                    color: 'gold',
+                    shape: 'rect',
+                    label: 'donate',
                 },
 
                 // Step 1 — block popup if required fields are empty
-                onClick: function (data, actions) {
+                onClick: function(data, actions) {
                     if (!donationForm.checkValidity()) {
                         donationForm.reportValidity();
                         return actions.reject();
@@ -259,75 +261,85 @@
                 },
 
                 // Step 2 — validate server-side then open the PayPal order
-                createOrder: function (data, actions) {
+                createOrder: function(data, actions) {
                     donationAmount = parseFloat(amountInput.value);
 
-                    return fetch('{{ route("donations.paypal.checkout") }}', {
-                        method  : 'POST',
-                        headers : {
-                            'Content-Type' : 'application/json',
-                            'Accept'       : 'application/json',
-                            'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content,
-                        },
-                        body: JSON.stringify({
-                            first_name : document.getElementById('first_name').value,
-                            last_name  : document.getElementById('last_name').value,
-                            email      : document.getElementById('email').value,
-                            amount     : donationAmount,
-                            message    : document.getElementById('message').value,
-                        }),
-                    })
-                    .then(function (response) {
-                        if (!response.ok) {
-                            return response.json().then(function (d) {
-                                var msg = 'Please check your information and try again.';
-                                if (d.errors) {
-                                    msg = Object.values(d.errors).flat().join('\n');
-                                }
-                                alert(msg);
-                                throw new Error('validation_failed');
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(function (res) {
-                        if (!res.ok) { throw new Error('checkout_failed'); }
+                    return fetch('{{ route('donations.paypal.checkout') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .content,
+                            },
+                            body: JSON.stringify({
+                                first_name: document.getElementById('first_name').value,
+                                last_name: document.getElementById('last_name').value,
+                                email: document.getElementById('email').value,
+                                amount: donationAmount,
+                                message: document.getElementById('message').value,
+                            }),
+                        })
+                        .then(function(response) {
+                            if (!response.ok) {
+                                return response.json().then(function(d) {
+                                    var msg =
+                                    'Please check your information and try again.';
+                                    if (d.errors) {
+                                        msg = Object.values(d.errors).flat().join('\n');
+                                    }
+                                    alert(msg);
+                                    throw new Error('validation_failed');
+                                });
+                            }
+                            return response.json();
+                        })
+                        .then(function(res) {
+                            if (!res.ok) {
+                                throw new Error('checkout_failed');
+                            }
 
-                        return actions.order.create({
-                            purchase_units: [{
-                                amount: {
-                                    value         : donationAmount.toFixed(2),
-                                    currency_code : '{{ config("services.paypal.currency", "USD") }}',
-                                },
-                                description: 'Amid Mission Donation',
-                            }],
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        value: donationAmount.toFixed(2),
+                                        currency_code: '{{ config('services.paypal.currency', 'USD') }}',
+                                    },
+                                    description: 'Amid Mission Donation',
+                                }],
+                            });
                         });
-                    });
                 },
 
                 // Step 3 — capture and record the payment
-                onApprove: function (data, actions) {
-                    return actions.order.capture().then(function () {
-                        return fetch('{{ route("donations.paypal.complete") }}', {
-                            method  : 'POST',
-                            headers : {
-                                'Content-Type' : 'application/json',
-                                'Accept'       : 'application/json',
-                                'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').content,
-                            },
-                            body: JSON.stringify({ paypal_order_id: data.orderID }),
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function() {
+                            return fetch('{{ route('donations.paypal.complete') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').content,
+                                },
+                                body: JSON.stringify({
+                                    paypal_order_id: data.orderID
+                                }),
+                            });
+                        })
+                        .then(function(r) {
+                            return r.json();
+                        })
+                        .then(function(res) {
+                            if (res.redirect) {
+                                window.location.href = res.redirect;
+                            }
                         });
-                    })
-                    .then(function (r) { return r.json(); })
-                    .then(function (res) {
-                        if (res.redirect) {
-                            window.location.href = res.redirect;
-                        }
-                    });
                 },
 
-                onError: function (err) {
-                    if (err && err.message !== 'validation_failed' && err.message !== 'checkout_failed') {
+                onError: function(err) {
+                    if (err && err.message !== 'validation_failed' && err.message !==
+                        'checkout_failed') {
                         console.error('PayPal error:', err);
                         alert('PayPal encountered an error. Please try again.');
                     }
