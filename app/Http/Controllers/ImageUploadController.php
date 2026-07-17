@@ -69,10 +69,16 @@ class ImageUploadController extends BaseController
     ];
 
     /**
-     * Preview an image using the configured filesystem disk.
+     * Preview an image, resolving across disk and path-prefix variations.
      *
-     * - local disk → streams the file with the correct MIME type.
-     * - s3 disk    → redirects to a Laravel-generated temporary URL.
+     * Search order:
+     *  1. Stored path on the configured default disk (new uploads).
+     *  2. Stored path on S3 — files uploaded before disk config was changed.
+     *  3. APP_FOLDER-prefixed path on S3 — legacy records whose stored path
+     *     omits the folder prefix that the S3 helper adds on upload.
+     *
+     * Returns a streamed response for local files, or a 10-minute temporary
+     * URL redirect for S3. HTTP 404 when nothing is found.
      */
     public function preview(string $model, int $id)
     {
@@ -80,27 +86,57 @@ class ImageUploadController extends BaseController
 
         abort_if(! $instance->image_url, 404);
 
-        $disk = config('filesystems.default', 'local');
+        $storedPath  = $instance->image_url;
+        $defaultDisk = config('filesystems.default', 'local');
+        $appFolder   = trim(config('app.name', 'amidmission'), '/');
 
-        abort_unless(Storage::disk($disk)->exists($instance->image_url), 404);
+        // Candidate list: [path, disk] in priority order.
+        $candidates = [
+            [$storedPath,                                          $defaultDisk], // 1. new uploads on configured disk
+            [$storedPath,                                          's3'],          // 2. same path on S3
+            [$appFolder . '/' . ltrim($storedPath, '/'),          's3'],          // 3. legacy prefix on S3
+        ];
 
-        if ($disk === 's3') {
-            return redirect(
-                Storage::disk($disk)->temporaryUrl($instance->image_url, now()->addMinutes(10))
+        // De-duplicate (e.g. when defaultDisk is already 's3').
+        $seen       = [];
+        $candidates = array_filter($candidates, function ($c) use (&$seen) {
+            $key = $c[1] . ':' . $c[0];
+            if (isset($seen[$key])) {
+                return false;
+            }
+            $seen[$key] = true;
+            return true;
+        });
+
+        foreach ($candidates as [$path, $disk]) {
+            try {
+                if (! Storage::disk($disk)->exists($path)) {
+                    continue;
+                }
+            } catch (\Throwable) {
+                continue; // disk unreachable or not configured — try next
+            }
+
+            if ($disk === 's3') {
+                return redirect(
+                    Storage::disk($disk)->temporaryUrl($path, now()->addMinutes(10))
+                );
+            }
+
+            // Local / public disk — stream securely.
+            $mime = Storage::disk($disk)->mimeType($path) ?: 'image/webp';
+
+            return response(
+                Storage::disk($disk)->get($path),
+                200,
+                [
+                    'Content-Type'  => $mime,
+                    'Cache-Control' => 'private, max-age=600',
+                ]
             );
         }
 
-        // Local / public disk — stream the file securely.
-        $mime = Storage::disk($disk)->mimeType($instance->image_url) ?: 'image/webp';
-
-        return response(
-            Storage::disk($disk)->get($instance->image_url),
-            200,
-            [
-                'Content-Type' => $mime,
-                'Cache-Control' => 'private, max-age=600',
-            ]
-        );
+        abort(404);
     }
 
     public function edit(string $model, int $id)
