@@ -29,6 +29,7 @@ use App\Models\Team;
 use App\Models\Testimonial;
 use App\Services\SystemLogger;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -119,14 +120,14 @@ class ImageUploadController extends BaseController
             }
 
             if ($disk === 's3') {
-                /** @var \Illuminate\Filesystem\FilesystemAdapter $s3Disk */
+                /** @var FilesystemAdapter $s3Disk */
                 $s3Disk = Storage::disk($disk);
 
                 return redirect($s3Disk->temporaryUrl($path, now()->addMinutes(10)));
             }
 
             // Local / public disk — stream securely.
-            /** @var \Illuminate\Filesystem\FilesystemAdapter $localDisk */
+            /** @var FilesystemAdapter $localDisk */
             $localDisk = Storage::disk($disk);
             $mime = $localDisk->mimeType($path) ?: 'image/webp';
 
