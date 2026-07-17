@@ -71,23 +71,42 @@ class ImageUploadController extends BaseController
 
     /**
      * Stream an image stored on the local disk.
+     * Returns an SVG placeholder when the file does not exist yet
+     * so the admin page still loads and the image can be uploaded.
      */
     public function preview(string $model, int $id)
     {
         $instance = $this->resolveModel($model, $id);
 
-        abort_if(! $instance->image_url, 404);
-
         /** @var FilesystemAdapter $disk */
         $disk = Storage::disk('local');
 
-        abort_unless($disk->exists($instance->image_url), 404);
+        if ($instance->image_url && $disk->exists($instance->image_url)) {
+            $mime = $disk->mimeType($instance->image_url) ?: 'image/webp';
 
-        $mime = $disk->mimeType($instance->image_url) ?: 'image/webp';
+            return response($disk->get($instance->image_url), 200, [
+                'Content-Type'  => $mime,
+                'Cache-Control' => 'private, max-age=600',
+            ]);
+        }
 
-        return response($disk->get($instance->image_url), 200, [
-            'Content-Type' => $mime,
-            'Cache-Control' => 'private, max-age=600',
+        // File not on local disk yet — return a neutral placeholder.
+        return $this->imagePlaceholder();
+    }
+
+    private function imagePlaceholder(): \Illuminate\Http\Response
+    {
+        $svg = <<<'SVG'
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <rect width="80" height="80" rx="6" fill="#e9ecef"/>
+  <text x="40" y="36" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#adb5bd">No</text>
+  <text x="40" y="48" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#adb5bd">image</text>
+</svg>
+SVG;
+
+        return response($svg, 200, [
+            'Content-Type'  => 'image/svg+xml',
+            'Cache-Control' => 'no-store',
         ]);
     }
 
