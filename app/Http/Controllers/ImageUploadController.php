@@ -3,6 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\S3;
+use App\Models\About;
+use App\Models\Banner;
+use App\Models\Blog;
+use App\Models\BookRecommendation;
+use App\Models\Collaborator;
+use App\Models\CollaboratorImage;
+use App\Models\Donation;
+use App\Models\Event;
+use App\Models\GalleryImage;
+use App\Models\MediaType;
+use App\Models\Page;
+use App\Models\Partner;
+use App\Models\Position;
+use App\Models\Product;
+use App\Models\Project;
+use App\Models\ProjectImage;
+use App\Models\Section;
+use App\Models\SectionCard;
+use App\Models\SectionImage;
+use App\Models\Service;
+use App\Models\Setting;
+use App\Models\Store;
+use App\Models\Team;
+use App\Models\Testimonial;
 use App\Services\SystemLogger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -14,32 +38,32 @@ use Throwable;
 class ImageUploadController extends BaseController
 {
     protected array $models = [
-        'about' => \App\Models\About::class,
-        'events' => \App\Models\Event::class,
-        'blogs' => \App\Models\Blog::class,
-        'banners' => \App\Models\Banner::class,
-        'book-recommendations' => \App\Models\BookRecommendation::class,
-        'donations' => \App\Models\Donation::class,
-        'media-types' => \App\Models\MediaType::class,
-        'gallery-images' => \App\Models\GalleryImage::class,
-        'collaborators' => \App\Models\Collaborator::class,
-        'collaborator-images' => \App\Models\CollaboratorImage::class,
-        'partners' => \App\Models\Partner::class,
-        'positions' => \App\Models\Position::class,
-        'products' => \App\Models\Product::class,
-        'projects' => \App\Models\Project::class,
-        'project-images' => \App\Models\ProjectImage::class,
-        'sections' => \App\Models\Section::class,
-        'section_cards' => \App\Models\SectionCard::class,
-        'section_images' => \App\Models\SectionImage::class,
-        'settings' => \App\Models\Setting::class,
-        'stores' => \App\Models\Store::class,
-        'testimonials' => \App\Models\Testimonial::class,
-        'teams' => \App\Models\Team::class,
-        'pages' => \App\Models\Page::class,
+        'about' => About::class,
+        'events' => Event::class,
+        'blogs' => Blog::class,
+        'banners' => Banner::class,
+        'book-recommendations' => BookRecommendation::class,
+        'donations' => Donation::class,
+        'media-types' => MediaType::class,
+        'gallery-images' => GalleryImage::class,
+        'collaborators' => Collaborator::class,
+        'collaborator-images' => CollaboratorImage::class,
+        'partners' => Partner::class,
+        'positions' => Position::class,
+        'products' => Product::class,
+        'projects' => Project::class,
+        'project-images' => ProjectImage::class,
+        'sections' => Section::class,
+        'section_cards' => SectionCard::class,
+        'section_images' => SectionImage::class,
+        'settings' => Setting::class,
+        'stores' => Store::class,
+        'testimonials' => Testimonial::class,
+        'teams' => Team::class,
+        'pages' => Page::class,
         'resources' => \App\Models\Resource::class,
-        'services' => \App\Models\Service::class,
-        'settings' => \App\Models\Setting::class,
+        'services' => Service::class,
+        'settings' => Setting::class,
 
         // add more models here
     ];
@@ -73,7 +97,7 @@ class ImageUploadController extends BaseController
             Storage::disk($disk)->get($instance->image_url),
             200,
             [
-                'Content-Type'  => $mime,
+                'Content-Type' => $mime,
                 'Cache-Control' => 'private, max-age=600',
             ]
         );
@@ -228,7 +252,7 @@ class ImageUploadController extends BaseController
 
             return back()->with('success', 'Image deleted successfully.');
 
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
 
             SystemLogger::log(
                 'Image deletion failed',
