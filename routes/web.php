@@ -130,10 +130,6 @@ Route::get('/donate-success', function () {
     return view('frontend.donations.success');
 })->name('donations.success');
 
-/* PayPal Webhooks */
-Route::post('/paypal/webhook', [PayPalWebhookController::class, 'handle'])->name('paypal.webhook');
-Route::get('/paypal/welcome', [PayPalWebhookController::class, 'welcome'])->name('membership.welcome');
-
 /* Store */
 Route::get('/store', [StoreController::class, 'indexPublic'])->name('stores.index.public');
 Route::get('/store/{slug}', [StoreController::class, 'show'])->name('store.products.show');
