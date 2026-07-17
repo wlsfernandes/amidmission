@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\S3;
 use App\Services\SystemLogger;
-use Aws\S3\S3Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class ImageUploadController extends BaseController
@@ -45,7 +45,10 @@ class ImageUploadController extends BaseController
     ];
 
     /**
-     * Preview image from S3
+     * Preview an image using the configured filesystem disk.
+     *
+     * - local disk → streams the file with the correct MIME type.
+     * - s3 disk    → redirects to a Laravel-generated temporary URL.
      */
     public function preview(string $model, int $id)
     {
@@ -53,23 +56,27 @@ class ImageUploadController extends BaseController
 
         abort_if(! $instance->image_url, 404);
 
-        $client = new S3Client([
-            'version' => 'latest',
-            'region' => config('filesystems.disks.s3.region'),
-            'credentials' => [
-                'key' => config('filesystems.disks.s3.key'),
-                'secret' => config('filesystems.disks.s3.secret'),
-            ],
-        ]);
+        $disk = config('filesystems.default', 'local');
 
-        $cmd = $client->getCommand('GetObject', [
-            'Bucket' => config('filesystems.disks.s3.bucket'),
-            'Key' => $instance->image_url,
-        ]);
+        abort_unless(Storage::disk($disk)->exists($instance->image_url), 404);
 
-        $request = $client->createPresignedRequest($cmd, '+10 minutes');
+        if ($disk === 's3') {
+            return redirect(
+                Storage::disk($disk)->temporaryUrl($instance->image_url, now()->addMinutes(10))
+            );
+        }
 
-        return redirect((string) $request->getUri());
+        // Local / public disk — stream the file securely.
+        $mime = Storage::disk($disk)->mimeType($instance->image_url) ?: 'image/webp';
+
+        return response(
+            Storage::disk($disk)->get($instance->image_url),
+            200,
+            [
+                'Content-Type'  => $mime,
+                'Cache-Control' => 'private, max-age=600',
+            ]
+        );
     }
 
     public function edit(string $model, int $id)
@@ -92,6 +99,8 @@ class ImageUploadController extends BaseController
 
         try {
             $instance = $this->resolveModel($model, $id);
+
+            $disk = config('filesystems.default', 'local');
 
             // Presets (simple + predictable)
             $preset = match ($request->input('image_type')) {
@@ -139,11 +148,11 @@ class ImageUploadController extends BaseController
                 ],
             };
 
-            DB::transaction(function () use ($request, $instance, $model, $preset) {
+            DB::transaction(function () use ($request, $instance, $model, $preset, $disk) {
 
                 // Delete old image if exists
                 if (! empty($instance->image_url)) {
-                    S3::delete($instance->image_url);
+                    S3::delete($instance->image_url, $disk);
                 }
 
                 // Upload new image (WebP + correct size)
@@ -154,7 +163,7 @@ class ImageUploadController extends BaseController
                     width: $preset['width'],
                     height: $preset['height'],
                     quality: $preset['quality'],
-                    disk: 's3'
+                    disk: $disk
                 );
 
                 $instance->update([
@@ -210,7 +219,7 @@ class ImageUploadController extends BaseController
             $instance = $this->resolveModel($model, $id);
 
             if (! empty($instance->image_url)) {
-                S3::delete($instance->image_url);
+                S3::delete($instance->image_url, config('filesystems.default', 'local'));
 
                 $instance->update([
                     'image_url' => null,
