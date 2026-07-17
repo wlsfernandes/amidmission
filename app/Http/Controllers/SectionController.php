@@ -301,7 +301,7 @@ class SectionController extends BaseController
                 'success' => true,
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             SystemLogger::log(
                 'Section single image deletion failed',
