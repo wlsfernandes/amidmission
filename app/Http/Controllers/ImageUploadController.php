@@ -86,7 +86,7 @@ class ImageUploadController extends BaseController
         $mime = $disk->mimeType($instance->image_url) ?: 'image/webp';
 
         return response($disk->get($instance->image_url), 200, [
-            'Content-Type'  => $mime,
+            'Content-Type' => $mime,
             'Cache-Control' => 'private, max-age=600',
         ]);
     }
