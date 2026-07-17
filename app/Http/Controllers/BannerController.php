@@ -88,12 +88,13 @@ class BannerController extends BaseController
         try {
             if ($request->hasFile('image_url')) {
                 $data['image_url'] = S3::uploadImageAsWebpPreset(
-                    $request->file('image_url'), // ✅ FIX HERE
+                    $request->file('image_url'),
                     'banners',
                     'cover',
                     1600,
                     600,
-                    85
+                    85,
+                    'local'
                 );
             }
             Banner::create($data);
@@ -137,12 +138,13 @@ class BannerController extends BaseController
         try {
             if ($request->hasFile('image_url')) {
                 $data['image_url'] = S3::uploadImageAsWebpPreset(
-                    $request->file('image_url'), // ✅ FIX HERE
+                    $request->file('image_url'),
                     'banners',
                     'cover',
                     1600,
                     600,
-                    85
+                    85,
+                    'local'
                 );
             }
             $banner->update($data);
@@ -173,9 +175,9 @@ class BannerController extends BaseController
     public function destroy(Banner $banner)
     {
         try {
-            // 🔥 Delete image from storage if exists
+            // Delete image from local storage if exists
             if (! empty($banner->image_url)) {
-                S3::delete($banner->image_url);
+                S3::delete($banner->image_url, 'local');
             }
 
             $banner->delete();

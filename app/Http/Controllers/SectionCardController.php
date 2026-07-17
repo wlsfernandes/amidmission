@@ -58,7 +58,8 @@ class SectionCardController extends Controller
         if ($request->hasFile('image_url')) {
             $data['image_url'] = S3::uploadImageAsWebpPreset(
                 $request->file('image_url'),
-                'pages/sections/cards'
+                'pages/sections/cards',
+                disk: 'local'
             );
         }
         SectionCard::create($data);
@@ -89,7 +90,8 @@ class SectionCardController extends Controller
         if ($request->hasFile('image_url')) {
             $data['image_url'] = S3::uploadImageAsWebpPreset(
                 $request->file('image_url'),
-                'pages/sections/cards'
+                'pages/sections/cards',
+                disk: 'local'
             );
         }
         $card->update($data);
