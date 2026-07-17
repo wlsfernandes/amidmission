@@ -31,6 +31,7 @@ use App\Services\SystemLogger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -85,7 +86,7 @@ class ImageUploadController extends BaseController
             $mime = $disk->mimeType($instance->image_url) ?: 'image/webp';
 
             return response($disk->get($instance->image_url), 200, [
-                'Content-Type'  => $mime,
+                'Content-Type' => $mime,
                 'Cache-Control' => 'private, max-age=600',
             ]);
         }
@@ -94,7 +95,7 @@ class ImageUploadController extends BaseController
         return $this->imagePlaceholder();
     }
 
-    private function imagePlaceholder(): \Illuminate\Http\Response
+    private function imagePlaceholder(): Response
     {
         $svg = <<<'SVG'
 <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
@@ -105,7 +106,7 @@ class ImageUploadController extends BaseController
 SVG;
 
         return response($svg, 200, [
-            'Content-Type'  => 'image/svg+xml',
+            'Content-Type' => 'image/svg+xml',
             'Cache-Control' => 'no-store',
         ]);
     }
