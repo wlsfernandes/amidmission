@@ -236,7 +236,7 @@ class SectionController extends BaseController
         try {
             // delete image from section->image
             if ($section->image_url) {
-                S3::delete($section->image_url);
+                S3::delete($section->image_url, 'local');
 
                 $section->update([
                     'image_url' => null,
@@ -245,7 +245,7 @@ class SectionController extends BaseController
 
             // delete multiple images from section_images
             if ($image->image_url) {
-                S3::delete($image->image_url);
+                S3::delete($image->image_url, 'local');
             }
 
             $image->delete();
@@ -290,7 +290,7 @@ class SectionController extends BaseController
         try {
 
             if ($section->image_url) {
-                S3::delete($section->image_url);
+                S3::delete($section->image_url, 'local');
             }
 
             $section->update([
@@ -326,7 +326,8 @@ class SectionController extends BaseController
 
             $data['image_url'] = S3::uploadImageAsWebpPreset(
                 $request->file('image_url'),
-                'pages/sections'
+                'pages/sections',
+                disk: 'local'
             );
         }
 
@@ -336,7 +337,8 @@ class SectionController extends BaseController
 
                 $path = S3::uploadImageAsWebpPreset(
                     $image,
-                    'pages/sections/gallery'
+                    'pages/sections/gallery',
+                    disk: 'local'
                 );
 
                 $section->images()->create([
