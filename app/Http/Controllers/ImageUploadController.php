@@ -180,24 +180,25 @@ SVG;
                 ],
             };
 
-            DB::transaction(function () use ($request, $instance, $model, $preset, $disk) {
+            // File operations run OUTSIDE the DB transaction so that a silent
+            // failure inside S3::delete() (e.g. missing media.path column) cannot
+            // abort the PostgreSQL transaction before the model update runs.
+            if (! empty($instance->image_url)) {
+                S3::delete($instance->image_url, $disk);
+            }
 
-                // Delete old image if exists
-                if (! empty($instance->image_url)) {
-                    S3::delete($instance->image_url, $disk);
-                }
+            $path = S3::uploadImageAsWebpPreset(
+                file: $request->file('image'),
+                directory: "{$model}/images",
+                mode: $preset['mode'],
+                width: $preset['width'],
+                height: $preset['height'],
+                quality: $preset['quality'],
+                disk: $disk
+            );
 
-                // Upload new image (WebP + correct size)
-                $path = S3::uploadImageAsWebpPreset(
-                    file: $request->file('image'),
-                    directory: "{$model}/images",
-                    mode: $preset['mode'],
-                    width: $preset['width'],
-                    height: $preset['height'],
-                    quality: $preset['quality'],
-                    disk: $disk
-                );
-
+            // Only the DB write needs a transaction.
+            DB::transaction(function () use ($instance, $path) {
                 $instance->update([
                     'image_url' => $path,
                 ]);
