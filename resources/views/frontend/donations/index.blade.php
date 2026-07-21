@@ -4,27 +4,37 @@
 
 @section('content')
 
+    <section class="hero-wrap">
+        <div class="slider-item" style="background-image: url('https://amidmission.com/images/banners/4/preview');">
 
+            <div class="overlay-1"></div>
+            <div class="overlay-2"></div>
+            <div class="overlay-3"></div>
+            <div class="overlay-4"></div>
 
+            <div class="container">
+                <div class="row no-gutters slider-text align-items-center">
+                    <div class="col-md-10 col-lg-7 ftco-animate">
 
+                        <div class="text w-100">
+                            <span class="subheading">
+                                @lang('pages.donation_page_title')
+                            </span>
+
+                            <h1 class="mb-4">
+                                @lang('pages.donate_now')
+                            </h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
     <!-- Donation Section -->
     <section class="service__section section__bg pt-130 pb-130 overhid">
         <div class="container">
-
-            <!-- Section Title -->
-            <div class="title__content center mb-5">
-                <h6>@lang('pages.donate_now')</h6>
-
-                <h2 class="mb-3">
-                    Support Amid Mission
-                </h2>
-
-                <p class="mx-auto" style="max-width: 680px;">
-                    Your generosity helps Amid Mission continue serving churches,
-                    leaders, families, and communities around the world.
-                </p>
-            </div>
-
 
             <div class="row justify-content-center">
                 <div class="col-xl-7 col-lg-8 col-md-10">
@@ -33,17 +43,13 @@
 
                         <!-- Donation Icon -->
                         <div class="text-center mb-4">
-                            <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-light"
-                                style="width: 78px; height: 78px;">
-                                <i class="fa-solid fa-heart fs-2 text-danger"></i>
-                            </div>
 
                             <h4 class="mt-3 mb-2">
-                                Make a Donation
+                                @lang('pages.make_donation')
                             </h4>
 
                             <p class="text-muted mb-0">
-                                Choose an amount and complete the form below.
+                                @lang('pages.choose_amount')
                             </p>
                         </div>
 
@@ -63,7 +69,7 @@
                                 <!-- Suggested Amounts -->
                                 <div class="col-12">
                                     <label class="form-label fw-semibold mb-3">
-                                        Select an amount
+                                        @lang('pages.select_an_amount')
                                     </label>
 
                                     <div class="row g-2">
@@ -85,7 +91,7 @@
                                 <!-- Custom Amount -->
                                 <div class="col-12">
                                     <label for="amount" class="form-label fw-semibold">
-                                        Donation amount
+                                        @lang('pages.donation_amount')
                                     </label>
 
                                     <div class="input-group input-group-lg">
@@ -96,7 +102,7 @@
                                         <input type="number" id="amount" name="amount"
                                             class="form-control @error('amount') is-invalid @enderror"
                                             value="{{ old('amount') }}" min="1" step="0.01"
-                                            placeholder="Enter amount" required>
+                                            placeholder="@lang('pages.donation_amount_placeholder')" required>
 
                                         @error('amount')
                                             <div class="invalid-feedback">
@@ -110,7 +116,7 @@
                                 <!-- First Name -->
                                 <div class="col-md-6">
                                     <label for="first_name" class="form-label fw-semibold">
-                                        First name
+                                        @lang('pages.first_name')
                                     </label>
 
                                     <input type="text" id="first_name" name="first_name"
@@ -128,7 +134,7 @@
                                 <!-- Last Name -->
                                 <div class="col-md-6">
                                     <label for="last_name" class="form-label fw-semibold">
-                                        Last name
+                                        @lang('pages.last_name')
                                     </label>
 
                                     <input type="text" id="last_name" name="last_name"
@@ -146,7 +152,7 @@
                                 <!-- Email -->
                                 <div class="col-12">
                                     <label for="email" class="form-label fw-semibold">
-                                        Email address
+                                        @lang('pages.email')
                                     </label>
 
                                     <input type="email" id="email" name="email"
@@ -164,14 +170,14 @@
                                 <!-- Optional Message -->
                                 <div class="col-12">
                                     <label for="message" class="form-label fw-semibold">
-                                        Message
+                                        @lang('pages.message')
                                         <span class="fw-normal text-muted">
-                                            (optional)
+                                            (@lang('pages.optional'))
                                         </span>
                                     </label>
 
                                     <textarea id="message" name="message" class="form-control @error('message') is-invalid @enderror" rows="4"
-                                        placeholder="Leave an optional message">{{ old('message') }}</textarea>
+                                        placeholder="@lang('pages.leave_an_optional_message')">{{ old('message') }}</textarea>
 
                                     @error('message')
                                         <div class="invalid-feedback">
@@ -284,7 +290,7 @@
                             if (!response.ok) {
                                 return response.json().then(function(d) {
                                     var msg =
-                                    'Please check your information and try again.';
+                                        'Please check your information and try again.';
                                     if (d.errors) {
                                         msg = Object.values(d.errors).flat().join('\n');
                                     }
@@ -349,4 +355,3 @@
         });
     </script>
 @endpush
-```
